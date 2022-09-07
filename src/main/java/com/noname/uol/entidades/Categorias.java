@@ -1,7 +1,7 @@
 package com.noname.uol.entidades;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import java.util.List;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,19 +13,22 @@ import lombok.Data;
 @Data
 @Document
 public class Categorias {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 	
-	public Long getId() {
+	@Id
+	private String id;
+	
+	private String nome;
+	
+	private List<Produtos> produtos;
+	
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	
-	private String nome;
 	
 	public String getNome() {
 		return nome;
@@ -34,4 +37,13 @@ public class Categorias {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+	
+	public List<Produtos> getProdutos() {
+		return produtos;
+	}
+
+	public void setProdutos(List<Produtos> produtos) {
+		this.produtos = produtos;
+	}
+	
 }

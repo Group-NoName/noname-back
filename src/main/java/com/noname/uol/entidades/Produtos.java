@@ -1,10 +1,7 @@
 package com.noname.uol.entidades;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,8 +13,15 @@ import lombok.Data;
 public class Produtos {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String id;
+	
+	private String nome;
+
+	private String descricao;
+
+	private Double preco;
+	
+	private List<Images> images;
 	
 	public String getId() {
 		return id;
@@ -43,38 +47,21 @@ public class Produtos {
 		this.descricao = descricao;
 	}
 
-	public Integer getPreco() {
+	public Double getPreco() {
 		return preco;
 	}
 
-	public void setPreco(Integer preco) {
+	public void setPreco(Double preco) {
 		this.preco = preco;
 	}
 	
-	private String nome;
-
-	private String descricao;
-
-	private Integer preco;
-
-	private List<Categorias> categoria = new ArrayList<>();
-
-	public List<Categorias> getCategoria() {
-		return categoria;
+	public List<Images> getImages() {
+		return images;
 	}
 
-	public void setCategoria(List<Categorias> categoria) {
-		this.categoria = categoria;
+	public void setImages(List<Images> images) {
+		this.images = images;
 	}
 	
-	private List<Tags> tags = new ArrayList<>();
-
-	public List<Tags> getTags() {
-		return tags;
-	}
-
-	public void setTags(List<Tags> tags) {
-		this.tags = tags;
-	}
 	
 }
