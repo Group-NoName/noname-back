@@ -2,11 +2,10 @@ package com.noname.uol.entidades;
 
 import java.util.List;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import lombok.Data;
 
@@ -15,6 +14,7 @@ import lombok.Data;
 public class Categorias {
 	
 	@Id
+	@Field("id")
 	private String id;
 	
 	private String nome;
