@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import com.noname.uol.entidades.Categorias;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.repositorios.CategoriaRepositorio;
 import com.noname.uol.servicos.CategoriasServico;
+import com.noname.uol.servicos.ServicosProduto;
 
 @CrossOrigin
 @RestController
@@ -30,6 +32,8 @@ public class CategoriaControle {
 	private CategoriasServico service;
 	@Autowired
 	private CategoriaRepositorio repo;
+	@Autowired
+	private ServicosProduto serviceProduto;
 	
 	@GetMapping("/categorias")
 	public ResponseEntity<List<Categorias>> getAllCategorias(){
@@ -61,9 +65,22 @@ public class CategoriaControle {
 	}
 	
 	@PutMapping("/categoria-produto/{id}")
-	public ResponseEntity<Void> insertProduto(@RequestBody Categorias objDto, @PathVariable String id){
+	public ResponseEntity<Void> insertProduto(
+			@RequestBody Categorias objDto,
+			@PathVariable String id){
 		Categorias categoria = service.findById(id);
 		categoria.getProdutos().addAll(objDto.getProdutos());
+		repo.save(categoria);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@DeleteMapping("/categoria-produto/{categoriaId}/{produtoId}")
+	public ResponseEntity<Void> deleteRelacao(
+			@PathVariable String categoriaId,
+			@PathVariable String produtoId){
+		Categorias categoria = service.findById(categoriaId);
+		Produtos produto = serviceProduto.findById(produtoId);
+		categoria.getProdutos().remove(produto);
 		repo.save(categoria);
 		return ResponseEntity.noContent().build();
 	}
