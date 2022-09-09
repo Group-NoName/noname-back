@@ -67,4 +67,5 @@ public class produtoDTO implements Serializable{
 		preco = obj.getPreco();
 		images = obj.getImages();
 	}
+
 }

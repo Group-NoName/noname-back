@@ -32,7 +32,10 @@ public class ProdutoControles {
 	@GetMapping("/produtos")
 	public ResponseEntity<List<produtoDTO>> obterProdutos() {
 		List<Produtos> produto = servico.findAll();
-		List<produtoDTO> produtoDto = produto.stream().map(x -> new produtoDTO(x)).collect(Collectors.toList());
+		List<produtoDTO> produtoDto = produto
+									.stream()
+									.map(x -> new produtoDTO(x))
+									.collect(Collectors.toList());
 		return ResponseEntity.ok().body(produtoDto);
 	}
 	
