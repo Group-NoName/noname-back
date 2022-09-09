@@ -41,19 +41,19 @@ public class CategoriaControle {
 		return ResponseEntity.ok().body(categorias);
 	}
 	
-	@GetMapping("/categoria/{id}")
+	@GetMapping("/categorias/{id}")
 	public ResponseEntity<Categorias> getCategoriaById(@PathVariable String id){
 		Categorias categorias = service.findById(id);
 		return ResponseEntity.ok().body(categorias);
 	}
 	
-	@GetMapping("/categoria/{id}/produtos")
+	@GetMapping("/categorias/{id}/produtos")
 	public ResponseEntity<List<Produtos>> findCategoriaProduto(@PathVariable String id) {
 		Categorias obj = service.findById(id);
 		return ResponseEntity.ok().body(obj.getProdutos());
 	}
 	
-	@PostMapping("/categoria")
+	@PostMapping("/categorias")
 	public ResponseEntity<Void> insertNewCategoria(@RequestBody Categorias categoria){
 		Categorias obj = service.insert(categoria);
 		URI uri = ServletUriComponentsBuilder
@@ -64,7 +64,7 @@ public class CategoriaControle {
 		return ResponseEntity.created(uri).build();
 	}
 	
-	@PutMapping("/categoria-produto/{id}")
+	@PutMapping("/categorias-produtos/{id}")
 	public ResponseEntity<Void> insertProduto(
 			@RequestBody Categorias objDto,
 			@PathVariable String id){
@@ -74,7 +74,7 @@ public class CategoriaControle {
 		return ResponseEntity.noContent().build();
 	}
 	
-	@DeleteMapping("/categoria-produto/{categoriaId}/{produtoId}")
+	@DeleteMapping("/categorias-produtos/{categoriaId}/{produtoId}")
 	public ResponseEntity<Void> deleteRelacao(
 			@PathVariable String categoriaId,
 			@PathVariable String produtoId){
@@ -82,6 +82,11 @@ public class CategoriaControle {
 		Produtos produto = serviceProduto.findById(produtoId);
 		categoria.getProdutos().remove(produto);
 		repo.save(categoria);
+		return ResponseEntity.noContent().build();
+	}
+	@DeleteMapping("/categorias/{id}")
+	public ResponseEntity<Void> delete(@PathVariable String id){
+		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 	

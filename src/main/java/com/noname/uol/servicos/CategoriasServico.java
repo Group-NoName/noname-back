@@ -28,4 +28,9 @@ public class CategoriasServico {
 	public Categorias insert(Categorias obj) {
 		return repositorio.save(obj);
 	}
+	
+	public void delete(String id) {
+		findById(id);
+		repositorio.deleteById(id);
+	}
 }
