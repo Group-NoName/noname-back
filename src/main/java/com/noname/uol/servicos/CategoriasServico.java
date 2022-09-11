@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.noname.uol.entidades.Categorias;
 import com.noname.uol.repositorios.CategoriaRepositorio;
-import com.noname.uol.servicos.execao.ObjectNotFoundException;
+import com.noname.uol.servicos.excecao.ObjectNotFoundException;
 
 @Service
 public class CategoriasServico {

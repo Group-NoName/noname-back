@@ -43,14 +43,14 @@ public class CategoriaControle {
 	
 	@GetMapping("/categorias/{id}")
 	public ResponseEntity<Categorias> getCategoriaById(@PathVariable String id){
-		Categorias categorias = service.findById(id);
-		return ResponseEntity.ok().body(categorias);
+		Categorias categoria = service.findById(id);
+		return ResponseEntity.ok().body(categoria);
 	}
 	
 	@GetMapping("/categorias/{id}/produtos")
 	public ResponseEntity<List<Produtos>> findCategoriaProduto(@PathVariable String id) {
-		Categorias obj = service.findById(id);
-		return ResponseEntity.ok().body(obj.getProdutos());
+		Categorias categoria = service.findById(id);
+		return ResponseEntity.ok().body(categoria.getProdutos());
 	}
 	
 	@PostMapping("/categorias")

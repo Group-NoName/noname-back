@@ -1,4 +1,4 @@
-package com.noname.uol.servicos.execao;
+package com.noname.uol.servicos.excecao;
 
 public class ObjectNotFoundException extends RuntimeException {
 	private static final long serialVersionUID = 1L;

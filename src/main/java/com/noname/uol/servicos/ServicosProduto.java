@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.noname.uol.dto.produtoDTO;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.repositorios.produtosRepositorio;
-import com.noname.uol.servicos.execao.ObjectNotFoundException;
+import com.noname.uol.servicos.excecao.ObjectNotFoundException;
 
 @Service
 public class ServicosProduto {

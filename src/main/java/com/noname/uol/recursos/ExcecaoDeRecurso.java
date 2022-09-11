@@ -7,10 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.noname.uol.servicos.execao.ObjectNotFoundException;
+import com.noname.uol.servicos.excecao.ObjectNotFoundException;
 
 @ControllerAdvice
-public class ExecaoDeRecurso {
+public class ExcecaoDeRecurso {
 	
 	@ExceptionHandler(ObjectNotFoundException.class)
 	public ResponseEntity<TratamentoDeErro> objectNotFound(ObjectNotFoundException e, HttpServletRequest request){
