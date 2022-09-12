@@ -1,5 +1,6 @@
 package com.noname.uol.servicos;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,4 +34,15 @@ public class TagsServico {
 		findById(id);
 		repositorio.deleteById(id);
 	}
+	
+	public String tagToString(List<Tags> tags) {
+		
+		List<String> StringTags = new ArrayList<String>();
+		for(Tags tag : tags) {
+			StringTags.add(" " + tag);
+		}
+		
+		return String.join(" ", StringTags);
+	}
+
 }

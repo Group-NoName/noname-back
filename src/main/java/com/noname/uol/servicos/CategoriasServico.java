@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.noname.uol.entidades.Categorias;
+import com.noname.uol.entidades.Produtos;
 import com.noname.uol.repositorios.CategoriaRepositorio;
 import com.noname.uol.servicos.excecao.ObjectNotFoundException;
 
@@ -20,11 +21,16 @@ public class CategoriasServico {
 		return repositorio.findAll();
 	}
 	
+	
 	public Categorias findById(String id) {
 		Optional<Categorias> obj = repositorio.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrado"));
 	}
 	
+	public List<Produtos> GetAllProducts(Categorias categoria){
+		return categoria.getProdutos();
+	}
+
 	public Categorias insert(Categorias obj) {
 		return repositorio.save(obj);
 	}

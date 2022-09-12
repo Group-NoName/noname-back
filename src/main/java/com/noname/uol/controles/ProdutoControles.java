@@ -15,7 +15,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.noname.uol.dto.produtoDTO;
 import com.noname.uol.entidades.Produtos;
-import com.noname.uol.servicos.ServicosProduto;
+import com.noname.uol.servicos.ProdutoServico;
+import com.noname.uol.servicos.TagsServico;
 
 import java.net.URI;
 import java.util.List;
@@ -27,11 +28,14 @@ import java.util.stream.Collectors;
 public class ProdutoControles {
 	
 	@Autowired
-	private ServicosProduto servico;
+	private ProdutoServico produtoServico;
+	
+	@Autowired
+	private TagsServico tagsServico;
 	
 	@GetMapping("/produtos")
 	public ResponseEntity<List<produtoDTO>> obterProdutos() {
-		List<Produtos> produto = servico.findAll();
+		List<Produtos> produto = produtoServico.findAll();
 		List<produtoDTO> produtoDto = produto
 									.stream()
 									.map(x -> new produtoDTO(x))
@@ -41,14 +45,14 @@ public class ProdutoControles {
 	
 	@GetMapping("/produtos/{id}")
 	public ResponseEntity<produtoDTO> obterProdutoId(@PathVariable String id) {
-		Produtos obj = servico.findById(id);
+		Produtos obj = produtoServico.findById(id);
 		return  ResponseEntity.ok().body(new produtoDTO(obj));
 	}
 	
 	@PostMapping("/cadastro")
 	public ResponseEntity<Void> insert(@RequestBody produtoDTO objDto){
-		Produtos obj = servico.fromDTO(objDto);
-		obj = servico.insert(obj);
+		Produtos obj = produtoServico.fromDTO(objDto);
+		obj = produtoServico.insert(obj);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/produtos/{id}")
@@ -59,15 +63,15 @@ public class ProdutoControles {
 	
 	@DeleteMapping("/excluir/{id}")
 	public ResponseEntity<Void> delete(@PathVariable String id) {
-		servico.delete(id);
+		produtoServico.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping("/atualizar/{id}")
 	public ResponseEntity<Void> update(@RequestBody produtoDTO objDto, @PathVariable String id){
-		Produtos obj = servico.fromDTO(objDto);
+		Produtos obj = produtoServico.fromDTO(objDto);
 		obj.setId(id);
-		obj = servico.update(obj);
+		obj = produtoServico.update(obj);
 		return ResponseEntity.noContent().build();
 	}
 }

@@ -6,7 +6,11 @@ import java.util.List;
 
 import com.noname.uol.entidades.Images;
 import com.noname.uol.entidades.Produtos;
+import com.noname.uol.entidades.Tags;
 
+import lombok.Data;
+
+@Data
 public class produtoDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 
@@ -15,50 +19,12 @@ public class produtoDTO implements Serializable{
 	private String descricao;
 	private Double preco;
 	private List<Images> images = new ArrayList<>();
+	private List<Tags> tags = new ArrayList<>();
 	
 	public produtoDTO() {
 		
 	}
 	
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
-	public Double getPreco() {
-		return preco;
-	}
-
-	public void setPreco(Double preco) {
-		this.preco = preco;
-	}
-	
-	public List<Images> getImages() {
-		return images;
-	}
-
-	public void setImages(List<Images> images) {
-		this.images = images;
-	}
 
 	public produtoDTO(Produtos obj) {
 		id = obj.getId();
@@ -66,6 +32,7 @@ public class produtoDTO implements Serializable{
 		descricao = obj.getDescricao();
 		preco = obj.getPreco();
 		images = obj.getImages();
+		tags = obj.getTags();
 	}
 
 }

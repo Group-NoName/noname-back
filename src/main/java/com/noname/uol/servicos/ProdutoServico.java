@@ -12,7 +12,7 @@ import com.noname.uol.repositorios.produtosRepositorio;
 import com.noname.uol.servicos.excecao.ObjectNotFoundException;
 
 @Service
-public class ServicosProduto {
+public class ProdutoServico {
 
 	@Autowired
 	private produtosRepositorio repositorio;
@@ -49,6 +49,6 @@ public class ServicosProduto {
 	}
 	
 	public Produtos fromDTO(produtoDTO objDto) {
-		return new Produtos(objDto.getId(), objDto.getNome(),  objDto.getDescricao(), objDto.getImages(), objDto.getPreco());
+		return new Produtos(objDto.getId(), objDto.getNome(),  objDto.getDescricao(), objDto.getImages(), objDto.getTags(), objDto.getPreco());
 	}
 }

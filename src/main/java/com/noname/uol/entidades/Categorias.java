@@ -10,8 +10,10 @@ import javax.persistence.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.Data;
 
 
+@Data
 @Document
 public class Categorias implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -23,39 +25,13 @@ public class Categorias implements Serializable{
 	@DBRef(lazy = true)
 	private List<Produtos> produtos = new ArrayList<>();
 	
-	public Categorias() {
-	}
+	public Categorias() {}
 
 	public Categorias(String id, String nome, List<Produtos> produtos) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.produtos = produtos;
-	}
-	
-	public List<Produtos>  getProdutos() {
-		return produtos;
-	}
-
-	public void setProdutos(List<Produtos>  produtos) {
-		this.produtos = produtos;
-	}
-	
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-	
-	public void setNome(String nome) {
-		this.nome = nome;
 	}
 
 	@Override

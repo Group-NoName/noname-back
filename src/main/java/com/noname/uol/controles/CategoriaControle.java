@@ -20,7 +20,7 @@ import com.noname.uol.entidades.Categorias;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.repositorios.CategoriaRepositorio;
 import com.noname.uol.servicos.CategoriasServico;
-import com.noname.uol.servicos.ServicosProduto;
+import com.noname.uol.servicos.ProdutoServico;
 
 @CrossOrigin
 @RestController
@@ -33,7 +33,7 @@ public class CategoriaControle {
 	@Autowired
 	private CategoriaRepositorio repo;
 	@Autowired
-	private ServicosProduto serviceProduto;
+	private ProdutoServico serviceProduto;
 	
 	@GetMapping("/categorias")
 	public ResponseEntity<List<Categorias>> getAllCategorias(){
