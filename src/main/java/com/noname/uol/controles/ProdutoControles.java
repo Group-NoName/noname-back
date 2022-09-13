@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+
 import com.noname.uol.dto.produtoDTO;
+import com.noname.uol.entidades.TagProduto;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.servicos.ProdutoServico;
 import com.noname.uol.servicos.TagsServico;
@@ -45,18 +47,22 @@ public class ProdutoControles {
 	
 	@GetMapping("/produtos/{id}")
 	public ResponseEntity<produtoDTO> obterProdutoId(@PathVariable String id) {
-		Produtos obj = produtoServico.findById(id);
-		return  ResponseEntity.ok().body(new produtoDTO(obj));
+		Produtos produto = produtoServico.findById(id);
+		return  ResponseEntity.ok().body(new produtoDTO(produto));
 	}
+	
+
+	
+	
 	
 	@PostMapping("/cadastro")
 	public ResponseEntity<Void> insert(@RequestBody produtoDTO objDto){
-		Produtos obj = produtoServico.fromDTO(objDto);
-		obj = produtoServico.insert(obj);
+		Produtos produto = produtoServico.fromDTO(objDto);
+		produto = produtoServico.insert(produto);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/produtos/{id}")
-				.buildAndExpand(obj.getId())
+				.buildAndExpand(produto.getId())
 				.toUri();
 		return ResponseEntity.created(uri).build();
 	}
