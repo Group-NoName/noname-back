@@ -57,4 +57,8 @@ public class Produtos implements Serializable {
 		return Objects.equals(id, other.id);
 	}
 	
+	public void AddToTagList(Tags tag) {
+		tags.add(tag);
+	}
+	
 }

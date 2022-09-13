@@ -16,11 +16,16 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.noname.uol.dto.produtoDTO;
 import com.noname.uol.entidades.TagProduto;
+import com.noname.uol.entidades.Tags;
+import com.noname.uol.recursos.ComparadorTagProduto;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.servicos.ProdutoServico;
 import com.noname.uol.servicos.TagsServico;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,8 +56,34 @@ public class ProdutoControles {
 		return  ResponseEntity.ok().body(new produtoDTO(produto));
 	}
 	
-
-	
+	//Temp rota
+	@GetMapping("/produtos-semelhantes/{id}")
+	public ResponseEntity<List<produtoDTO>> ObterProdutoSemelhante(@PathVariable String id){
+		
+		List<Tags> tagsProdutoAlvo = produtoServico.findById(id).getTags();
+		List<Produtos> todosOsProdutos = produtoServico.findAll()				;
+		List<TagProduto> todasTagProdutos = new ArrayList<>();
+		//temp nome variaveis
+		for(Produtos produto : todosOsProdutos){
+			TagProduto atualTagProduto = new TagProduto();
+			atualTagProduto.setProduto(produto);
+			for(Tags tag : tagsProdutoAlvo) {
+				if(tagsProdutoAlvo.contains(tag)) {
+					atualTagProduto.UpScore();	
+				}	
+			}	
+		}
+		Collections.sort(todasTagProdutos, new ComparadorTagProduto());
+		
+		List<Produtos> produtosSortidos = produtoServico.fromTagProduto(todasTagProdutos);
+		
+		List<produtoDTO> produtoDto = produtosSortidos
+				.stream()
+				.map(x -> new produtoDTO(x))
+				.collect(Collectors.toList());		
+		
+		return ResponseEntity.ok().body(produtoDto);
+	}
 	
 	
 	@PostMapping("/cadastro")
@@ -74,10 +105,29 @@ public class ProdutoControles {
 	}
 	
 	@PutMapping("/atualizar/{id}")
-	public ResponseEntity<Void> update(@RequestBody produtoDTO objDto, @PathVariable String id){
+	public ResponseEntity<Void> update(
+			@RequestBody produtoDTO objDto, 
+			@PathVariable String id){
+		
 		Produtos obj = produtoServico.fromDTO(objDto);
 		obj.setId(id);
 		obj = produtoServico.update(obj);
 		return ResponseEntity.noContent().build();
 	}
+
+	@PutMapping("/adicionar-tag/{produtoId}/{tagId}")
+	public ResponseEntity<Void> addTag(
+			@PathVariable String produtoId,
+			@PathVariable String tagId){
+		
+		Produtos produto = produtoServico.findById(produtoId);
+		Tags tag = tagsServico.findById(tagId);
+		produto.setId(produtoId);
+		produto.AddToTagList(tag);
+		produto = produtoServico.update(produto);
+		
+		return ResponseEntity.noContent().build();
+		
+	}
+	
 }

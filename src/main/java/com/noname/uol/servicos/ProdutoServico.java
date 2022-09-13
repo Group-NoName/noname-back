@@ -2,12 +2,15 @@ package com.noname.uol.servicos;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.noname.uol.dto.produtoDTO;
 import com.noname.uol.entidades.Produtos;
+import com.noname.uol.entidades.TagProduto;
 import com.noname.uol.repositorios.produtosRepositorio;
 import com.noname.uol.servicos.excecao.ObjectNotFoundException;
 
@@ -51,4 +54,13 @@ public class ProdutoServico {
 	public Produtos fromDTO(produtoDTO objDto) {
 		return new Produtos(objDto.getId(), objDto.getNome(),  objDto.getDescricao(), objDto.getImages(), objDto.getTags(), objDto.getPreco());
 	}
+	
+	public List<Produtos> fromTagProduto(List<TagProduto> listTagProduto) {
+		List<Produtos> obj = listTagProduto.stream()
+								.map(TagProduto -> TagProduto.getProduto())
+								.collect(Collectors.toList());
+		return obj;
+	}
+	
+	
 }
