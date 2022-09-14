@@ -9,6 +9,6 @@ public class ComparadorTagProduto implements Comparator<TagProduto>{
 
 	@Override
 	public int compare(TagProduto o1, TagProduto o2) {
-		return o2.getScore() - o1.getScore();
+		return o2.getScore().compareTo(o1.getScore());
 	}
 }

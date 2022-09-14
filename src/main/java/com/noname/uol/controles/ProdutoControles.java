@@ -18,6 +18,7 @@ import com.noname.uol.dto.produtoDTO;
 import com.noname.uol.entidades.TagProduto;
 import com.noname.uol.entidades.Tags;
 import com.noname.uol.recursos.ComparadorTagProduto;
+import com.noname.uol.entidades.Categorias;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.servicos.ProdutoServico;
 import com.noname.uol.servicos.TagsServico;
@@ -65,15 +66,21 @@ public class ProdutoControles {
 		List<TagProduto> todasTagProdutos = new ArrayList<>();
 		//temp nome variaveis
 		for(Produtos produto : todosOsProdutos){
-			TagProduto atualTagProduto = new TagProduto();
-			atualTagProduto.setProduto(produto);
-			for(Tags tag : tagsProdutoAlvo) {
-				if(tagsProdutoAlvo.contains(tag)) {
-					atualTagProduto.UpScore();	
-				}	
-			}	
+			
+			TagProduto atualTagProduto = new TagProduto(produto, 0);
+			
+			for (Tags tag : produto.getTags()) {
+				if(tagsProdutoAlvo.contains(tag))
+					atualTagProduto.UpScore();
+			}
+			
+			todasTagProdutos.add(atualTagProduto);
 		}
 		Collections.sort(todasTagProdutos, new ComparadorTagProduto());
+		
+		for (TagProduto tagProduto : todasTagProdutos) {
+			System.out.println(tagProduto.getScore());
+		}
 		
 		List<Produtos> produtosSortidos = produtoServico.fromTagProduto(todasTagProdutos);
 		
@@ -114,20 +121,17 @@ public class ProdutoControles {
 		obj = produtoServico.update(obj);
 		return ResponseEntity.noContent().build();
 	}
+	
+	@PutMapping("/adicionar-tag/{id}")
+	public ResponseEntity<Void> AddTag(
+									@RequestBody Produtos objDto,
+									@PathVariable String id){
+		
+		Produtos produto = produtoServico.findById(id);
+		produto.getTags().addAll(objDto.getTags());
+		produtoServico.insert(produto);
 
-	@PutMapping("/adicionar-tag/{produtoId}/{tagId}")
-	public ResponseEntity<Void> addTag(
-			@PathVariable String produtoId,
-			@PathVariable String tagId){
-		
-		Produtos produto = produtoServico.findById(produtoId);
-		Tags tag = tagsServico.findById(tagId);
-		produto.setId(produtoId);
-		produto.AddToTagList(tag);
-		produto = produtoServico.update(produto);
-		
 		return ResponseEntity.noContent().build();
-		
 	}
 	
 }

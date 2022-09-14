@@ -1,11 +1,13 @@
 package com.noname.uol.entidades;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Id;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
@@ -26,7 +28,8 @@ public class Produtos implements Serializable {
 	
 	private List<Images> images;
 	
-	private List<Tags> tags;
+	@DBRef(lazy = true)
+	private List<Tags> tags = new ArrayList<>();
 	
 	public Produtos() {}
 	
