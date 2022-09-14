@@ -62,5 +62,9 @@ public class ProdutoServico {
 		return obj;
 	}
 	
+	public void save(Produtos produto) {
+		repositorio.save(produto);
+	}
+	
 	
 }

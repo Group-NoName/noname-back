@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.noname.uol.entidades.Categorias;
+import com.noname.uol.entidades.Produtos;
 import com.noname.uol.entidades.Tags;
+import com.noname.uol.servicos.ProdutoServico;
 import com.noname.uol.servicos.TagsServico;
 
 @CrossOrigin
@@ -27,23 +29,26 @@ import com.noname.uol.servicos.TagsServico;
 public class TagsControle {
 
 	@Autowired
-	private TagsServico service;
+	private TagsServico tagServico;
+	
+	@Autowired
+	private ProdutoServico produtoServico;
 	
 	@GetMapping("/tags")
 	public ResponseEntity<List<Tags>> getAllTags(){
-		List<Tags> tags = service.findAll();
+		List<Tags> tags = tagServico.findAll();
 		return ResponseEntity.ok().body(tags);
 	}
 	
 	@GetMapping("/tags/{id}")
 	public ResponseEntity<Tags> GetTagById(@PathVariable String id){
-		Tags tag = service.findById(id);
+		Tags tag = tagServico.findById(id);
 		return ResponseEntity.ok().body(tag);
 	}
 	
 	@PostMapping("/inserir")
 	public ResponseEntity<Void> InsertNewTag(@RequestBody Tags tag){
-		Tags obj = service.insert(tag);
+		Tags obj = tagServico.insert(tag);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
@@ -54,9 +59,21 @@ public class TagsControle {
 	
 	@DeleteMapping("/excluir/{id}")
 	public ResponseEntity<Void> DeleteTag(@PathVariable String id){
-		service.delete(id);
+		tagServico.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 	
-
+	@DeleteMapping("/tag-produtos/{tagId}/{produtoId}")
+	public ResponseEntity<Void> deleteRelacao(
+											@PathVariable String tagId,
+											@PathVariable String produtoId){
+		
+		Produtos produto = produtoServico.findById(produtoId);
+		Tags tag = tagServico.findById(tagId);
+		produto.getTags().remove(tag);
+		produtoServico.save(produto);
+		return ResponseEntity.noContent().build();
+	}
+	
+	
 }

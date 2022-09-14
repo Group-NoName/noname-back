@@ -77,11 +77,7 @@ public class ProdutoControles {
 			todasTagProdutos.add(atualTagProduto);
 		}
 		Collections.sort(todasTagProdutos, new ComparadorTagProduto());
-		
-		for (TagProduto tagProduto : todasTagProdutos) {
-			System.out.println(tagProduto.getScore());
-		}
-		
+		 
 		List<Produtos> produtosSortidos = produtoServico.fromTagProduto(todasTagProdutos);
 		
 		List<produtoDTO> produtoDto = produtosSortidos
@@ -133,5 +129,7 @@ public class ProdutoControles {
 
 		return ResponseEntity.noContent().build();
 	}
+	
+	
 	
 }
