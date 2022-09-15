@@ -127,7 +127,7 @@ public class ProdutoControles {
 
 		return ResponseEntity.noContent().build();
 	}
-	
+	 
 	@GetMapping("/produtos-quantia/{quantia}")
 	public ResponseEntity<List<produtoDTO>> ObterQuantiaDeProdutos(@PathVariable String quantia){
 		
