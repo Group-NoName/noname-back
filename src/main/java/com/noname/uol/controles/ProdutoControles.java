@@ -130,7 +130,7 @@ public class ProdutoControles {
 	 
 	@GetMapping("/produtos-quantia/{quantia}")
 	public ResponseEntity<List<produtoDTO>> ObterQuantiaDeProdutos(@PathVariable String quantia){
-		 
+		  
 		List<Produtos> produto = produtoServico.findAll();
 		List<produtoDTO> produtoDto = produto
 									.stream()
