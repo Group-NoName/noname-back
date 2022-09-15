@@ -53,7 +53,7 @@ public class CategoriaControle {
 		return ResponseEntity.ok().body(categoria.getProdutos());
 	}
 	
-	@PostMapping("/categorias")
+	@PostMapping("/cadastro")
 	public ResponseEntity<Void> insertNewCategoria(@RequestBody Categorias categoria){
 		Categorias obj = service.insert(categoria);
 		URI uri = ServletUriComponentsBuilder
@@ -84,7 +84,7 @@ public class CategoriaControle {
 		repo.save(categoria);
 		return ResponseEntity.noContent().build();
 	}
-	@DeleteMapping("/categorias/{id}")
+	@DeleteMapping("/excluir/{id}")
 	public ResponseEntity<Void> delete(@PathVariable String id){
 		service.delete(id);
 		return ResponseEntity.noContent().build();
