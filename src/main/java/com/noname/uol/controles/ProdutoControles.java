@@ -57,7 +57,6 @@ public class ProdutoControles {
 		return  ResponseEntity.ok().body(new produtoDTO(produto));
 	}
 	
-	//Temp rota
 	@GetMapping("/produtos-semelhantes/{id}")
 	public ResponseEntity<List<produtoDTO>> ObterProdutoSemelhante(@PathVariable String id){
 		
@@ -87,8 +86,7 @@ public class ProdutoControles {
 		
 		return ResponseEntity.ok().body(produtoDto);
 	}
-	
-	
+	 
 	@PostMapping("/cadastro")
 	public ResponseEntity<Void> insert(@RequestBody produtoDTO objDto){
 		Produtos produto = produtoServico.fromDTO(objDto);
@@ -130,6 +128,16 @@ public class ProdutoControles {
 		return ResponseEntity.noContent().build();
 	}
 	
-	
+	@GetMapping("/produtos-quantia/{quantia}")
+	public ResponseEntity<List<produtoDTO>> ObterQuantiaDeProdutos(@PathVariable String quantia){
+		
+		List<Produtos> produto = produtoServico.findAll();
+		List<produtoDTO> produtoDto = produto
+									.stream()
+									.map(x -> new produtoDTO(x))
+									.limit(Integer.parseInt(quantia))
+									.collect(Collectors.toList());
+		return ResponseEntity.ok().body(produtoDto);
+	}
 	
 }
