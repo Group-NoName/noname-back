@@ -124,7 +124,13 @@ public class ProdutoControles {
 		Produtos produto = produtoServico.findById(id);
 		produto.getTags().addAll(objDto.getTags());
 		produtoServico.insert(produto);
-
+		
+		for(int i = 0; i < objDto.getTags().size(); i++) {
+			Tags tag = tagsServico.findById(objDto.getTags().get(i).getId());
+			tag.getProdutos().add(produto);
+			tagsServico.insert(tag);
+		}
+		
 		return ResponseEntity.noContent().build();
 	}
 	 

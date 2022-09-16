@@ -1,14 +1,20 @@
 package com.noname.uol.entidades;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+
 import javax.persistence.Id;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
+
+
 
 @Data
 @Document
@@ -18,12 +24,17 @@ public class Tags {
 	private String id;
 
 	private String nome;
-
+	
+	@JsonIgnoreProperties(value = {"tags", "descricao"})
+	@DBRef
+	private List<Produtos> produtos = new ArrayList<>();
+	
 	public Tags() {}
-	public Tags(String id, String nome) {
+	public Tags(String id, String nome, List<Produtos> produtos) {
 		super();
 		this.id = id;
 		this.nome = nome;
+		this.produtos = produtos;
 	}
 	
 	
