@@ -74,6 +74,16 @@ public class CategoriaControle {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@PutMapping("/atualizar/{id}")
+	public ResponseEntity<Void> update(
+			@PathVariable String id,
+			@RequestBody Categorias categorias){
+		Categorias ids = service.body(categorias);
+		ids.setId(id);
+		ids = service.update(ids);
+		return ResponseEntity.noContent().build();
+	}
+	
 	@DeleteMapping("/categorias-produtos/{categoriaId}/{produtoId}")
 	public ResponseEntity<Void> deleteRelacao(
 			@PathVariable String categoriaId,
