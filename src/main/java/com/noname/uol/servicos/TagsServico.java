@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.noname.uol.entidades.Produtos;
 import com.noname.uol.entidades.Tags;
 import com.noname.uol.repositorios.TagsRepositorio;
 import com.noname.uol.servicos.excecao.ObjectNotFoundException;
@@ -34,7 +35,20 @@ public class TagsServico {
 		findById(id);
 		repositorio.deleteById(id);
 	}
-	
+	public Tags update(Tags obj) {
+		Tags newObj = findById(obj.getId());
+		updateData(newObj, obj);
+		return repositorio.save(newObj);
+		
+	}
+	public Tags body(Tags obj) {
+		return new Tags(obj.getId(), obj.getNome(), obj.getProdutos());
+		
+	}
+	public void updateData(Tags newObj, Tags obj) {
+		newObj.setNome(obj.getNome());
+		newObj.getProdutos();
+	}
 	public String tagToString(List<Tags> tags) {
 		
 		List<String> StringTags = new ArrayList<String>();

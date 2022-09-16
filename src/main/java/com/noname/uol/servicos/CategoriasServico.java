@@ -34,7 +34,18 @@ public class CategoriasServico {
 	public Categorias insert(Categorias obj) {
 		return repositorio.save(obj);
 	}
-	
+	public Categorias update(Categorias obj) {
+		Categorias newObj = findById(obj.getId());
+		updateData(newObj, obj);
+		return repositorio.save(newObj);
+	}
+	public Categorias body(Categorias obj) {
+		return new Categorias(obj.getId(),obj.getNome(), obj.getProdutos());
+	}
+	private void updateData(Categorias newObj, Categorias obj) {
+		newObj.setNome(obj.getNome());
+		newObj.getProdutos();
+	}
 	public void delete(String id) {
 		findById(id);
 		repositorio.deleteById(id);
