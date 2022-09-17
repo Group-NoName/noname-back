@@ -132,6 +132,7 @@ public class ProdutoControles {
 	public ResponseEntity<List<produtoDTO>> ObterQuantiaDeProdutos(@PathVariable String quantia){
 		  
 		List<Produtos> produto = produtoServico.findAll();
+		Collections.reverse(produto);
 		List<produtoDTO> produtoDto = produto
 									.stream()
 									.map(x -> new produtoDTO(x))
