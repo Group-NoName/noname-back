@@ -72,6 +72,8 @@ public class TagsControle {
 		Tags tag = tagServico.findById(tagId);
 		produto.getTags().remove(tag);
 		produtoServico.save(produto);
+		tag.getProdutos().remove(produto);
+		tagServico.insert(tag);
 		return ResponseEntity.noContent().build();
 	}
 	@PutMapping("/atualizar/{tagId}")
