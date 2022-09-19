@@ -17,16 +17,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.noname.uol.dto.produtoDTO;
 import com.noname.uol.entidades.TagProduto;
 import com.noname.uol.entidades.Tags;
-import com.noname.uol.recursos.ComparadorTagProduto;
-import com.noname.uol.entidades.Categorias;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.servicos.ProdutoServico;
-import com.noname.uol.servicos.TagsServico;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,8 +34,6 @@ public class ProdutoControles {
 	@Autowired
 	private ProdutoServico produtoServico;
 	
-	@Autowired
-	private TagsServico tagsServico;
 	
 	@GetMapping("/produtos")
 	public ResponseEntity<List<produtoDTO>> obterProdutos() {
@@ -69,14 +63,16 @@ public class ProdutoControles {
 			TagProduto atualTagProduto = new TagProduto(produto, 0);
 			
 			for (Tags tag : produto.getTags()) {
-				if(tagsProdutoAlvo.contains(tag))
+				if(tagsProdutoAlvo.contains(tag)) {
 					atualTagProduto.UpScore();
+				}
 			}
-			
 			todasTagProdutos.add(atualTagProduto);
 		}
-		Collections.sort(todasTagProdutos, new ComparadorTagProduto());
-		 
+
+
+		Collections.sort(todasTagProdutos, TagProduto.Comparators.SCORE);
+		
 		List<Produtos> produtosSortidos = produtoServico.fromTagProduto(todasTagProdutos);
 		
 		List<produtoDTO> produtoDto = produtosSortidos
