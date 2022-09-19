@@ -1,11 +1,11 @@
 # No Name Back-End - Uol
 
 IDE recomendadas
-  > Eclipse
+  > <a href="https://www.eclipse.org/downloads/download.php?">Eclipse</a>
   
-  > VsCode
+  > <a href="https://code.visualstudio.com/">VSCode</a>
   
-  > qualquer outra que suporte Java 17
+  > <a href="https://www.treinaweb.com.br/blog/principais-ides-para-desenvolvimento-java/">Outras IDE</a>
   
 ```cmd
 1º Clone do repositorio Back-end do No-Name
