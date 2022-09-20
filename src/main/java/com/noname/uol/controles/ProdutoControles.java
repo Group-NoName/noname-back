@@ -51,8 +51,8 @@ public class ProdutoControles {
 		return  ResponseEntity.ok().body(new produtoDTO(produto));
 	}
 	
-	@GetMapping("/produtos-semelhantes/{id}")
-	public ResponseEntity<List<produtoDTO>> ObterProdutoSemelhante(@PathVariable String id){
+	@GetMapping("/produtos-semelhantes/{id}/{quantia}")
+	public ResponseEntity<List<produtoDTO>> ObterProdutoSemelhante(@PathVariable String id, @PathVariable String quantia){
 		
 		List<Tags> tagsProdutoAlvo = produtoServico.findById(id).getTags();
 		List<Produtos> todosOsProdutos = produtoServico.findAll()				;
@@ -78,6 +78,7 @@ public class ProdutoControles {
 		List<produtoDTO> produtoDto = produtosSortidos
 				.stream()
 				.map(x -> new produtoDTO(x))
+				.limit(Integer.parseInt(quantia))
 				.collect(Collectors.toList());		
 		
 		return ResponseEntity.ok().body(produtoDto);
