@@ -5,10 +5,8 @@ import java.util.List;
 
 import com.noname.uol.entidades.TagProduto;
 
-public class ComparadorTagProduto implements Comparator<TagProduto>{
+public class ComparadorTagProduto {
+	
 
-	@Override
-	public int compare(TagProduto o1, TagProduto o2) {
-		return o2.getScore().compareTo(o1.getScore());
-	}
+
 }
