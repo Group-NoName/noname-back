@@ -59,7 +59,8 @@ public class ProdutoControles {
 		List<TagProduto> todasTagProdutos = new ArrayList<>();
 		//temp nome variaveis
 		for(Produtos produto : todosOsProdutos){
-			
+			if (produto == produtoServico.findById(id))
+				continue;
 			TagProduto atualTagProduto = new TagProduto(produto, 0);
 			
 			for (Tags tag : produto.getTags()) {
@@ -74,6 +75,8 @@ public class ProdutoControles {
 		Collections.sort(todasTagProdutos, TagProduto.Comparators.SCORE);
 		
 		List<Produtos> produtosSortidos = produtoServico.fromTagProduto(todasTagProdutos);
+		
+		
 		
 		List<produtoDTO> produtoDto = produtosSortidos
 				.stream()
