@@ -25,7 +25,7 @@ import com.noname.uol.servicos.TagsServico;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/tags")
+@RequestMapping("/tag")
 public class TagsControle {
 
 	@Autowired
@@ -35,19 +35,19 @@ public class TagsControle {
 	private ProdutoServico produtoServico;
 	
 	@GetMapping("/tags")
-	public ResponseEntity<List<Tags>> getAllTags(){
+	public ResponseEntity<List<Tags>> obterTags(){
 		List<Tags> tags = tagServico.findAll();
 		return ResponseEntity.ok().body(tags);
 	}
 	
 	@GetMapping("/tags/{id}")
-	public ResponseEntity<Tags> GetTagById(@PathVariable String id){
+	public ResponseEntity<Tags> obterTagId(@PathVariable String id){
 		Tags tag = tagServico.findById(id);
 		return ResponseEntity.ok().body(tag);
 	}
 	
 	@PostMapping("/inserir")
-	public ResponseEntity<Void> InsertNewTag(@RequestBody Tags tag){
+	public ResponseEntity<Void> inserirNovaTag(@RequestBody Tags tag){
 		Tags obj = tagServico.insert(tag);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -58,7 +58,7 @@ public class TagsControle {
 	}
 	
 	@DeleteMapping("/excluir/{id}")
-	public ResponseEntity<Void> DeleteTag(@PathVariable String id){
+	public ResponseEntity<Void> deletarTag(@PathVariable String id){
 		tagServico.delete(id);
 		return ResponseEntity.noContent().build();
 	}

@@ -36,25 +36,25 @@ public class CategoriaControle {
 	private ProdutoServico serviceProduto;
 	
 	@GetMapping("/categorias")
-	public ResponseEntity<List<Categorias>> getAllCategorias(){
+	public ResponseEntity<List<Categorias>> obterTodasCategorias(){
 		List<Categorias> categorias = service.findAll();
 		return ResponseEntity.ok().body(categorias);
 	}
 	
 	@GetMapping("/categorias/{id}")
-	public ResponseEntity<Categorias> getCategoriaById(@PathVariable String id){
+	public ResponseEntity<Categorias> obterCategoriaId(@PathVariable String id){
 		Categorias categoria = service.findById(id);
 		return ResponseEntity.ok().body(categoria);
 	}
 	
 	@GetMapping("/categorias/{id}/produtos")
-	public ResponseEntity<List<Produtos>> findCategoriaProduto(@PathVariable String id) {
+	public ResponseEntity<List<Produtos>> ObterCategoriaProduto(@PathVariable String id) {
 		Categorias categoria = service.findById(id);
 		return ResponseEntity.ok().body(categoria.getProdutos());
 	}
 	
 	@PostMapping("/cadastro")
-	public ResponseEntity<Void> insertNewCategoria(@RequestBody Categorias categoria){
+	public ResponseEntity<Void> inserirNovaCategoria(@RequestBody Categorias categoria){
 		Categorias obj = service.insert(categoria);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -65,7 +65,7 @@ public class CategoriaControle {
 	}
 	
 	@PutMapping("/categorias-produtos/{id}")
-	public ResponseEntity<Void> insertProduto(
+	public ResponseEntity<Void> inserirProduto(
 			@RequestBody Categorias objDto,
 			@PathVariable String id){
 		Categorias categoria = service.findById(id);
@@ -75,7 +75,7 @@ public class CategoriaControle {
 	}
 	
 	@DeleteMapping("/categorias-produtos/{categoriaId}/{produtoId}")
-	public ResponseEntity<Void> deleteRelacao(
+	public ResponseEntity<Void> deletarRelacaoCategoriaProduto(
 			@PathVariable String categoriaId,
 			@PathVariable String produtoId){
 		Categorias categoria = service.findById(categoriaId);
@@ -84,8 +84,9 @@ public class CategoriaControle {
 		repo.save(categoria);
 		return ResponseEntity.noContent().build();
 	}
+	
 	@DeleteMapping("/excluir/{id}")
-	public ResponseEntity<Void> delete(@PathVariable String id){
+	public ResponseEntity<Void> deletarCategoria(@PathVariable String id){
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}

@@ -52,10 +52,9 @@ public class ProdutoControles {
 	}
 	
 	@GetMapping("/produtos-semelhantes/{id}")
-	public ResponseEntity<List<produtoDTO>> ObterProdutoSemelhante(@PathVariable String id){
-		
+	public ResponseEntity<List<produtoDTO>> obterProdutosSemelhantes(@PathVariable String id){
 		List<Tags> tagsProdutoAlvo = produtoServico.findById(id).getTags();
-		List<Produtos> todosOsProdutos = produtoServico.findAll()				;
+		List<Produtos> todosOsProdutos = produtoServico.findAll();
 		List<TagProduto> todasTagProdutos = new ArrayList<>();
 		//temp nome variaveis
 		for(Produtos produto : todosOsProdutos){
@@ -87,7 +86,7 @@ public class ProdutoControles {
 	}
 	 
 	@PostMapping("/cadastro")
-	public ResponseEntity<Void> insert(@RequestBody produtoDTO objDto){
+	public ResponseEntity<Void> inserirProduto(@RequestBody produtoDTO objDto){
 		Produtos produto = produtoServico.fromDTO(objDto);
 		produto = produtoServico.insert(produto);
 		URI uri = ServletUriComponentsBuilder
@@ -99,13 +98,13 @@ public class ProdutoControles {
 	}
 	
 	@DeleteMapping("/excluir/{id}")
-	public ResponseEntity<Void> delete(@PathVariable String id) {
+	public ResponseEntity<Void> deletarProduto(@PathVariable String id) {
 		produtoServico.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping("/atualizar/{id}")
-	public ResponseEntity<Void> update(
+	public ResponseEntity<Void> atualizarProduto(
 			@RequestBody produtoDTO objDto, 
 			@PathVariable String id){
 		
@@ -116,9 +115,9 @@ public class ProdutoControles {
 	}
 	
 	@PutMapping("/adicionar-tag/{id}")
-	public ResponseEntity<Void> AddTag(
-									@RequestBody Produtos objDto,
-									@PathVariable String id){
+	public ResponseEntity<Void> adicionarTag(
+			@RequestBody Produtos objDto, 
+			@PathVariable String id){
 		
 		Produtos produto = produtoServico.findById(id);
 		produto.getTags().addAll(objDto.getTags());
@@ -128,7 +127,7 @@ public class ProdutoControles {
 	}
 	 
 	@GetMapping("/produtos-quantia/{quantia}")
-	public ResponseEntity<List<produtoDTO>> ObterQuantiaDeProdutos(@PathVariable String quantia){
+	public ResponseEntity<List<produtoDTO>> obterQuantiaDeProdutos(@PathVariable String quantia){
 		  
 		List<Produtos> produto = produtoServico.findAll();
 		Collections.reverse(produto);

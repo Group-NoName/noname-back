@@ -27,7 +27,7 @@ public class CategoriasServico {
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrado"));
 	}
 	
-	public List<Produtos> GetAllProducts(Categorias categoria){
+	public List<Produtos> getAllProducts(Categorias categoria){
 		return categoria.getProdutos();
 	}
 
