@@ -19,6 +19,8 @@ import com.noname.uol.entidades.TagProduto;
 import com.noname.uol.entidades.Tags;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.servicos.ProdutoServico;
+import com.noname.uol.servicos.TagsServico;
+
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -33,7 +35,8 @@ public class ProdutoControles {
 	
 	@Autowired
 	private ProdutoServico produtoServico;
-	
+	@Autowired	
+	private TagsServico tagsServico;
 	
 	@GetMapping("/produtos")
 	public ResponseEntity<List<produtoDTO>> obterProdutos() {
@@ -122,6 +125,14 @@ public class ProdutoControles {
 		Produtos produto = produtoServico.findById(id);
 		produto.getTags().addAll(objDto.getTags());
 		produtoServico.insert(produto);
+
+
+		for(int i = 0; i < objDto.getTags().size(); i++) {
+			Tags tag = tagsServico.findById(objDto.getTags().get(i).getId());
+			tag.getProdutos().add(produto);
+			tagsServico.insert(tag);
+		}
+
 
 		return ResponseEntity.noContent().build();
 	}
