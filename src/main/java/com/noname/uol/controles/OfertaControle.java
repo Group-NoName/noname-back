@@ -1,6 +1,7 @@
 package com.noname.uol.controles;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,35 +48,50 @@ public class OfertaControle {
 				.toUri();
 		return ResponseEntity.created(uri).build();
 	}
-	@GetMapping("{id}")
-	public ResponseEntity<?> teste(@PathVariable String id){
-		Ofertas teste = ofertaServico.findById(id);
-		Double desconto = teste.getDesconto()/100;
-		for( int x = 0; x < teste.getProdutos().size(); x++) {
-			Double testando = teste.getProdutos().get(x).getPreco() * desconto;
-			Double matematico = teste.getProdutos().get(x).getPreco() - testando;
-			Produtos produto = produtoServico.findById(teste.getProdutos().get(x).getId());
-			produto.setDesconto(matematico);
-			produtoServico.insert(produto);
-		}
+	
+	@PostMapping("inserir")
+	public ResponseEntity<?> atualizarTodosDescontosProdutosOferta(@RequestBody Ofertas objDto){
+		Ofertas oferta = objDto;
+		
+		Double desconto = oferta.getDesconto()/100;
+
+		List<String> listaIds = new ArrayList<>();
+		
+		//#TODO Otimização
+		for (Produtos produto : objDto.getProdutos()) 
+			listaIds.add(produto.getId());
+		
+		List<Produtos> produtos = ofertaServico.atualizarDescontos(desconto, listaIds);
+		
+		ofertaServico.save(oferta);
+		
 		return ResponseEntity.ok().body(desconto);
 	}
 	
+	
+	
 	@PutMapping("{id}")
-	public ResponseEntity<?> atualizarOferta(@PathVariable String id, @RequestBody Ofertas itens){
+	public ResponseEntity<?> atualizarOferta(@PathVariable String id, @RequestBody Ofertas objDto){
 		Ofertas oferta = ofertaServico.findById(id);
-		Double desconto = oferta.getDesconto()/100;
-		oferta.getProdutos().addAll(itens.getProdutos());
-		ofertaServico.save(oferta);
-		
-		for( int x = 0; x < itens.getProdutos().size(); x++) {
 
-		}
+		Double desconto = oferta.getDesconto()/100;
 		
+		List<String> listaIds = new ArrayList<>();
+		
+		//#TODO Otimização
+		for (Produtos produto : objDto.getProdutos()) 
+			listaIds.add(produto.getId());
+		
+		List<Produtos> produtos = ofertaServico.atualizarDescontos(desconto, listaIds);
+		oferta.getProdutos().addAll(produtos);
+		
+		ofertaServico.save(oferta);
+
 		return ResponseEntity.noContent().build();
 	}
+	
 	@DeleteMapping("{id}/{id2}")
-	public ResponseEntity<?> deleteOfeta(@PathVariable String id,@PathVariable String id2){
+	public ResponseEntity<?> deletarOferta(@PathVariable String id,@PathVariable String id2){
 		Ofertas teste = ofertaServico.findById(id);
 		Produtos produto = produtoServico.findById(id2);
 		produto.setDesconto(0.0);

@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 
 @Data
@@ -22,6 +24,7 @@ public class Ofertas implements Serializable{
 	
 	private Double desconto;
 	
+	@JsonIgnoreProperties(value = {"tags", "descricao", "images"})
 	@DBRef(lazy = true)
 	private List<Produtos> produtos = new ArrayList<>();
 	
