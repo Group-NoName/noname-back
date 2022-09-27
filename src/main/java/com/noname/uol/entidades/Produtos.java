@@ -28,12 +28,14 @@ public class Produtos implements Serializable {
 	
 	private List<Images> images;
 	
+	private Double desconto;
+	
 	@DBRef(lazy = true)
 	private List<Tags> tags = new ArrayList<>();
 	
 	public Produtos() {}
 	
-	public Produtos(String id, String nome, String descricao, List<Images> images, List<Tags> tags, Double preco) {
+	public Produtos(String id, String nome, String descricao, List<Images> images, List<Tags> tags, Double preco, Double desconto) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -41,6 +43,7 @@ public class Produtos implements Serializable {
 		this.preco = preco;
 		this.images = images;
 		this.tags = tags;
+		this.desconto = desconto;
 	}
 
 	@Override

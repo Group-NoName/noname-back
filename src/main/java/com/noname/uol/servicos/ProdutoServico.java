@@ -52,7 +52,7 @@ public class ProdutoServico {
 	}
 	
 	public Produtos fromDTO(produtoDTO objDto) {
-		return new Produtos(objDto.getId(), objDto.getNome(),  objDto.getDescricao(), objDto.getImages(), objDto.getTags(), objDto.getPreco());
+		return new Produtos(objDto.getId(), objDto.getNome(),  objDto.getDescricao(), objDto.getImages(), objDto.getTags(), objDto.getPreco(), objDto.getDesconto());
 	}
 	
 	public List<Produtos> fromTagProduto(List<TagProduto> listTagProduto) {
@@ -65,6 +65,8 @@ public class ProdutoServico {
 	public void save(Produtos produto) {
 		repositorio.save(produto);
 	}
-	
+	public void resetar(String id, Double number) {
+		findById(id).setDesconto(number);;	
+	}
 	
 }
