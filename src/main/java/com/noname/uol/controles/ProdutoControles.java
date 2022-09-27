@@ -59,7 +59,7 @@ public class ProdutoControles {
 		List<Tags> tagsProdutoAlvo = produtoServico.findById(id).getTags();
 		List<Produtos> todosOsProdutos = produtoServico.findAll();
 		List<TagProduto> todasTagProdutos = new ArrayList<>();
-		//temp nome variaveis
+		
 		for(Produtos produto : todosOsProdutos){
 			if (produto == produtoServico.findById(id))
 				continue;
