@@ -38,6 +38,7 @@ public class OfertaControle {
 		List<Ofertas> oferta = ofertaServico.findAll();
 		return ResponseEntity.ok().body(oferta);
 	}
+	
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirOferta(@RequestBody Ofertas oferta){
 		Ofertas obj = ofertaServico.insert(oferta);
