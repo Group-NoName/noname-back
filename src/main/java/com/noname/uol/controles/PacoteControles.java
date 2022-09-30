@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,12 +27,18 @@ public class PacoteControles {
 	
 	@GetMapping("/pacotes")
 	public ResponseEntity<List<Pacotes>> obterPacotes(){
-		List<Pacotes> pacote = pacoteServico.obterPacotes();
-		return ResponseEntity.ok().body(pacote);
+		List<Pacotes> pacotes = pacoteServico.findAll();
+		return ResponseEntity.ok().body(pacotes);
 	}
 
+	@GetMapping("/pacote/{id}")
+	public ResponseEntity<Pacotes> obterPacoteId(@PathVariable String id){
+		Pacotes pacote = pacoteServico.findById(id);
+		return ResponseEntity.ok().body(pacote);
+	}
+	
 	@PostMapping("/cadastro")
-	public ResponseEntity<?> insetirPacote(@RequestBody Pacotes objDto){
+	public ResponseEntity<?> inserirPacote(@RequestBody Pacotes objDto){
 		Pacotes pacote = objDto;
 		pacoteServico.save(pacote);
 		return ResponseEntity.noContent().build();
