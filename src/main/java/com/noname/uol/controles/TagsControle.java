@@ -46,7 +46,7 @@ public class TagsControle {
 		return ResponseEntity.ok().body(tag);
 	}
 	
-	@PostMapping("/inserir")
+	@PostMapping("/cadastro")
 	public ResponseEntity<Void> inserirNovaTag(@RequestBody Tags tag){
 		Tags obj = tagServico.insert(tag);
 		URI uri = ServletUriComponentsBuilder

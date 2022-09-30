@@ -25,4 +25,11 @@ public class PacoteServico {
 		Optional<Pacotes> obj = repositorio.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Pacote não encontrado"));
 	}
+	public Pacotes insert(Pacotes obj) {
+		return repositorio.save(obj);
+	}
+	public void delete(String id) {
+		findById(id);
+		repositorio.deleteById(id);
+	}
 }
