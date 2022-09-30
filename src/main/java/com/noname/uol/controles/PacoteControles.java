@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.noname.uol.entidades.Pacotes;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.servicos.PacoteServico;
+import com.noname.uol.servicos.ProdutoServico;
 
 @CrossOrigin
 @RestController
@@ -26,6 +27,9 @@ public class PacoteControles {
 
 	@Autowired
 	private PacoteServico pacoteServico;
+	
+	@Autowired
+	private ProdutoServico produtoServico;
 	
 	@GetMapping("/pacotes")
 	public ResponseEntity<List<Pacotes>> obterPacotes(){
@@ -60,6 +64,48 @@ public class PacoteControles {
 		Pacotes obj = objDto;
 		obj.setId(id);
 		obj = pacoteServico.update(obj);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@PutMapping("inserir-produto/{id}")
+	public ResponseEntity<?> inserirProdutosNoPacote(
+			@PathVariable String id,
+			@RequestBody Pacotes objDto){
+		
+		Pacotes pacote = pacoteServico.findById(id);
+		
+		List<String> listaIds = new ArrayList<>();
+		
+		for (Produtos produto : objDto.getProdutos()) 
+			listaIds.add(produto.getId());
+		
+		List<Produtos> produtos = produtoServico.fromListIds(listaIds);
+		
+		pacote.getProdutos().addAll(produtos);
+	
+		pacoteServico.save(pacote);
+		
+		return ResponseEntity.noContent().build();
+	}
+	
+	@PutMapping("remover-produto/{id}")
+	public ResponseEntity<?> removerProdutosNoPacote(
+			@PathVariable String id,
+			@RequestBody Pacotes objDto){
+		
+		Pacotes pacote = pacoteServico.findById(id);
+		
+		List<String> listaIds = new ArrayList<>();
+		
+		for (Produtos produto : objDto.getProdutos()) 
+			listaIds.add(produto.getId());
+		
+		List<Produtos> produtos = produtoServico.fromListIds(listaIds);
+		
+		pacote.getProdutos().removeAll(produtos);
+		
+		pacoteServico.save(pacote);
+		
 		return ResponseEntity.noContent().build();
 	}
 }

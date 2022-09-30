@@ -1,5 +1,6 @@
 package com.noname.uol.servicos;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
@@ -61,6 +62,16 @@ public class ProdutoServico {
 								.collect(Collectors.toList());
 		return obj;
 	}
+	
+	public List<Produtos> fromListIds(List<String> listId){
+		List<Produtos> obj = new ArrayList<>();
+		for (String string : listId)
+			obj.add(findById(string));
+		
+		return obj;
+
+	}
+	
 	
 	public void save(Produtos produto) {
 		repositorio.save(produto);
