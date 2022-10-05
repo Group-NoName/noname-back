@@ -71,8 +71,8 @@ public class OfertaControle {
 	
 	
 	
-	@PutMapping("{id}")
-	public ResponseEntity<?> atualizarOferta(@PathVariable String id, @RequestBody Ofertas objDto){
+	@PutMapping("adicionar-produto/{id}")
+	public ResponseEntity<?> adicionarOfertaProduto(@PathVariable String id, @RequestBody Ofertas objDto){
 		Ofertas oferta = ofertaServico.findById(id);
 
 		Double desconto = oferta.getDesconto()/100;
@@ -91,12 +91,27 @@ public class OfertaControle {
 		return ResponseEntity.noContent().build();
 	}
 	
-	@DeleteMapping("{id}/{id2}")
-	public ResponseEntity<?> deletarOferta(@PathVariable String id,@PathVariable String id2){
-		Ofertas teste = ofertaServico.findById(id);
-		Produtos produto = produtoServico.findById(id2);
-		produto.setDesconto(0.0);
-		produtoServico.save(produto);
+	@PutMapping("remover-produto/{id}")
+	public ResponseEntity<?> removerOfertaProduto(@PathVariable String id,@RequestBody Ofertas objDto){
+	
+		Ofertas oferta = ofertaServico.findById(id);
+
+		Double desconto = 0.0;
+		
+		List<String> listaIds = new ArrayList<>();
+		
+		//#TODO Otimização
+		for (Produtos produto : objDto.getProdutos()) 
+			listaIds.add(produto.getId());
+		
+		List<Produtos> produtos = ofertaServico.atualizarDescontos(desconto, listaIds);
+		
+		oferta.getProdutos().removeAll(produtos);
+		
+		ofertaServico.save(oferta);
+
 		return ResponseEntity.noContent().build();
 	}
+	
+	//#TODO Deletar oferta
 }
