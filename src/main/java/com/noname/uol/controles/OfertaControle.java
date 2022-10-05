@@ -67,7 +67,7 @@ public class OfertaControle {
 	public ResponseEntity<?> atualizarTodosDescontosProdutosOferta(@RequestBody Ofertas objDto){
 		Ofertas oferta = objDto;
 		
-		Double desconto = oferta.getDesconto()/100;
+		Double desconto = 1 - (oferta.getDesconto()/100);
 
 		List<String> listaIds = new ArrayList<>();
 		
@@ -88,7 +88,7 @@ public class OfertaControle {
 	public ResponseEntity<?> adicionarOfertaProduto(@PathVariable String id, @RequestBody Ofertas objDto){
 		Ofertas oferta = ofertaServico.findById(id);
 
-		Double desconto = oferta.getDesconto()/100;
+		Double desconto = 1 - (oferta.getDesconto()/100);;
 		
 		List<String> listaIds = new ArrayList<>();
 		
