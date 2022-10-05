@@ -1,6 +1,7 @@
 package com.noname.uol.controles;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -124,18 +125,16 @@ public class ProdutoControles {
 			@PathVariable String id){
 		
 		Produtos produto = produtoServico.findById(id);
+
+		for (Tags tag : objDto.getTags()) 
+			if(produto.getTags().contains(tag)) 
+				return new ResponseEntity<>(HttpStatus.CONFLICT);	
+		
+		
 		produto.getTags().addAll(objDto.getTags());
 		produtoServico.insert(produto);
-
-
-		for(int i = 0; i < objDto.getTags().size(); i++) {
-			Tags tag = tagsServico.findById(objDto.getTags().get(i).getId());
-			tag.getProdutos().add(produto);
-			tagsServico.insert(tag);
-		}
-
-
-		return ResponseEntity.noContent().build();
+		
+		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 	 
 	@GetMapping("/produtos-quantia/{quantia}")

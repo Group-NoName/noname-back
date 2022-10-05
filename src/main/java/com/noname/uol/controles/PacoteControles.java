@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,7 +20,6 @@ import com.noname.uol.entidades.Pacotes;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.servicos.PacoteServico;
 import com.noname.uol.servicos.ProdutoServico;
-
 @CrossOrigin
 @RestController
 @RequestMapping("/pacote")
@@ -30,6 +30,8 @@ public class PacoteControles {
 	
 	@Autowired
 	private ProdutoServico produtoServico;
+	
+	
 	
 	@GetMapping("/pacotes")
 	public ResponseEntity<List<Pacotes>> obterPacotes(){
@@ -76,16 +78,19 @@ public class PacoteControles {
 		
 		List<String> listaIds = new ArrayList<>();
 		
-		for (Produtos produto : objDto.getProdutos()) 
+		for (Produtos produto : objDto.getProdutos()) {
+			if(pacote.getProdutos().contains(produto))
+				return new ResponseEntity<>("Produto de id: '" + produto.getId() + "'\ne nome: '" + produtoServico.findById(produto.getId()).getNome() + "' \n já está cadastrado no pacote", HttpStatus.CONFLICT);
 			listaIds.add(produto.getId());
 		
+		}
 		List<Produtos> produtos = produtoServico.fromListIds(listaIds);
 		
 		pacote.getProdutos().addAll(produtos);
 	
 		pacoteServico.save(pacote);
 		
-		return ResponseEntity.noContent().build();
+		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 	
 	@PutMapping("remover-produto/{id}")
@@ -99,6 +104,8 @@ public class PacoteControles {
 		
 		for (Produtos produto : objDto.getProdutos()) 
 			listaIds.add(produto.getId());
+		
+
 		
 		List<Produtos> produtos = produtoServico.fromListIds(listaIds);
 		

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,6 +35,12 @@ public class OfertaControle {
 	@GetMapping("/ofertas")
 	public ResponseEntity<List<Ofertas>> obterOfertas(){
 		List<Ofertas> oferta = ofertaServico.findAll();
+		return ResponseEntity.ok().body(oferta);
+	}
+	
+	@GetMapping("/ofertas/{id}")
+	public ResponseEntity<Ofertas> obterOfertaPorId(@PathVariable String id){
+		Ofertas oferta = ofertaServico.findById(id);
 		return ResponseEntity.ok().body(oferta);
 	}
 	
