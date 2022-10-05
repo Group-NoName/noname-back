@@ -30,8 +30,6 @@ public class OfertaControle {
 	
 	@Autowired
 	private OfertasServico ofertaServico;
-	@Autowired
-	private ProdutoServico produtoServico;
 	
 	@GetMapping("/ofertas")
 	public ResponseEntity<List<Ofertas>> obterOfertas(){
@@ -50,7 +48,7 @@ public class OfertaControle {
 		return ResponseEntity.created(uri).build();
 	}
 	
-	@PostMapping("inserir")
+	@PostMapping("inserir-produtos-oferta")
 	public ResponseEntity<?> atualizarTodosDescontosProdutosOferta(@RequestBody Ofertas objDto){
 		Ofertas oferta = objDto;
 		
@@ -114,4 +112,21 @@ public class OfertaControle {
 	}
 	
 	//#TODO Deletar oferta
+	@DeleteMapping("excluir/{id}")
+	public ResponseEntity<Void> deletarOferta(@PathVariable String id){
+
+		Ofertas oferta = ofertaServico.findById(id);
+		
+		List<String> listaIds = new ArrayList<>();
+		
+		//#TODO Otimização
+		for (Produtos produto : oferta.getProdutos()) 
+			listaIds.add(produto.getId());
+			
+		ofertaServico.atualizarDescontos(0, listaIds);
+		
+		ofertaServico.delete(id);
+		
+		return ResponseEntity.noContent().build();
+	}
 }

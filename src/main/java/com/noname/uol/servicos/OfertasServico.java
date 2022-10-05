@@ -35,6 +35,11 @@ public class OfertasServico {
 		repositorio.save(oferta);
 	}
 	
+	public void delete(String id) {
+		findById(id);
+		repositorio.deleteById(id);
+	}
+	
 	public List<Produtos> atualizarDescontos(double desconto, List<String> produtosParaAtualizar){
 		List<Produtos> produtos = new ArrayList<>();
 		for(String idProduto : produtosParaAtualizar) {
