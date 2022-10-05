@@ -40,7 +40,7 @@ public class OfertasServico {
 		repositorio.deleteById(id);
 	}
 	
-	public List<Produtos> atualizarDescontos(double desconto, List<String> produtosParaAtualizar){
+	public List<Produtos> atualizarPrecosDescontos(double desconto, List<String> produtosParaAtualizar){
 		List<Produtos> produtos = new ArrayList<>();
 		for(String idProduto : produtosParaAtualizar) {
 			
@@ -52,5 +52,19 @@ public class OfertasServico {
 		}
 		return produtos;
 	}
+	
+	public List<Produtos> atualizarApenasDescontos(double desconto, List<String> produtosParaAtualizar){
+		List<Produtos> produtos = new ArrayList<>();
+		for(String idProduto : produtosParaAtualizar) {
+			
+			Produtos produto = produtoServico.findById(idProduto);
+			Double resultadoFinal = desconto;
+			produto.setDesconto(resultadoFinal);
+			produtos.add(produto);
+			produtoServico.insert(produto);
+		}
+		return produtos;
+	}
+	
 	
 }

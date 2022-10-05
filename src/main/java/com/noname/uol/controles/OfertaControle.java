@@ -40,6 +40,14 @@ public class OfertaControle {
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirOferta(@RequestBody Ofertas oferta){
 		Ofertas obj = ofertaServico.insert(oferta);
+		
+		List<String> listaIds = new ArrayList<>();
+		
+		for (Produtos produto : oferta.getProdutos()) 
+			listaIds.add(produto.getId());
+		
+		ofertaServico.atualizarApenasDescontos(oferta.getDesconto(), listaIds);
+		
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
@@ -60,7 +68,7 @@ public class OfertaControle {
 		for (Produtos produto : objDto.getProdutos()) 
 			listaIds.add(produto.getId());
 		
-		List<Produtos> produtos = ofertaServico.atualizarDescontos(desconto, listaIds);
+		List<Produtos> produtos = ofertaServico.atualizarPrecosDescontos(desconto, listaIds);
 		
 		ofertaServico.save(oferta);
 		
@@ -81,7 +89,7 @@ public class OfertaControle {
 		for (Produtos produto : objDto.getProdutos()) 
 			listaIds.add(produto.getId());
 		
-		List<Produtos> produtos = ofertaServico.atualizarDescontos(desconto, listaIds);
+		List<Produtos> produtos = ofertaServico.atualizarPrecosDescontos(desconto, listaIds);
 		oferta.getProdutos().addAll(produtos);
 		
 		ofertaServico.save(oferta);
@@ -102,7 +110,7 @@ public class OfertaControle {
 		for (Produtos produto : objDto.getProdutos()) 
 			listaIds.add(produto.getId());
 		
-		List<Produtos> produtos = ofertaServico.atualizarDescontos(desconto, listaIds);
+		List<Produtos> produtos = ofertaServico.atualizarPrecosDescontos(desconto, listaIds);
 		
 		oferta.getProdutos().removeAll(produtos);
 		
@@ -123,7 +131,7 @@ public class OfertaControle {
 		for (Produtos produto : oferta.getProdutos()) 
 			listaIds.add(produto.getId());
 			
-		ofertaServico.atualizarDescontos(0, listaIds);
+		ofertaServico.atualizarPrecosDescontos(0, listaIds);
 		
 		ofertaServico.delete(id);
 		
