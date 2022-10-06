@@ -91,15 +91,10 @@ public class ProdutoControles {
 	}
 	 
 	@PostMapping("/cadastro")
-	public ResponseEntity<Void> inserirProduto(@RequestBody produtoDTO objDto){
+	public ResponseEntity<?> inserirProduto(@RequestBody produtoDTO objDto){
 		Produtos produto = produtoServico.fromDTO(objDto);
 		produto = produtoServico.insert(produto);
-		URI uri = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path("/produtos/{id}")
-				.buildAndExpand(produto.getId())
-				.toUri();
-		return ResponseEntity.created(uri).build();
+		return new ResponseEntity<>("Produto cadastrado com sucesso!", HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/excluir/{id}")

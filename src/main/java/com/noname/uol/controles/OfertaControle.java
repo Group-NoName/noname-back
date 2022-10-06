@@ -32,6 +32,9 @@ public class OfertaControle {
 	@Autowired
 	private OfertasServico ofertaServico;
 	
+	@Autowired
+	private ProdutoServico produtoServico;
+	
 	@GetMapping("/ofertas")
 	public ResponseEntity<List<Ofertas>> obterOfertas(){
 		List<Ofertas> oferta = ofertaServico.findAll();
@@ -54,13 +57,8 @@ public class OfertaControle {
 			listaIds.add(produto.getId());
 		
 		ofertaServico.atualizarApenasDescontos(oferta.getDesconto(), listaIds);
-		
-		URI uri = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(obj.getId())
-				.toUri();
-		return ResponseEntity.created(uri).build();
+	
+		return new ResponseEntity<>("Oferta cadastrada!", HttpStatus.CREATED);
 	}
 	
 	@PostMapping("inserir-produtos-oferta")
@@ -92,16 +90,31 @@ public class OfertaControle {
 		
 		List<String> listaIds = new ArrayList<>();
 		
-		//#TODO Otimização
+		boolean hasCopy = false;
+		String errorLog = "";
+		
 		for (Produtos produto : objDto.getProdutos()) 
+		{
+			if(oferta.getProdutos().contains(produto)) {
+				hasCopy = true;
+				errorLog += "Produto '" + produtoServico.findById(produto.getId()).getNome() + "' já está cadastrado na oferta \n";
+			}
+			
 			listaIds.add(produto.getId());
+		}
 		
-		List<Produtos> produtos = ofertaServico.atualizarPrecosDescontos(desconto, listaIds);
-		oferta.getProdutos().addAll(produtos);
-		
-		ofertaServico.save(oferta);
-
-		return ResponseEntity.noContent().build();
+		if(hasCopy) 
+		{
+			return new ResponseEntity<>(errorLog, HttpStatus.NOT_ACCEPTABLE);
+		}
+		else 
+		{
+			List<Produtos> produtos = ofertaServico.atualizarPrecosDescontos(desconto, listaIds);
+			oferta.getProdutos().addAll(produtos);
+			
+			ofertaServico.save(oferta);
+		}
+		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 	
 	@PutMapping("remover-produto/{id}")
@@ -125,6 +138,27 @@ public class OfertaControle {
 
 		return ResponseEntity.noContent().build();
 	}
+	
+	@PutMapping("retirar-todos-produtos/{id}")
+	public ResponseEntity<?> retirarTodosProdutosDaOferta(@PathVariable String id){
+		
+		Ofertas oferta = ofertaServico.findById(id);
+		
+		List<String> listaIds = new ArrayList<>();
+		
+		//#TODO Otimização
+		for (Produtos produto : produtoServico.findAll()) 
+			listaIds.add(produto.getId());
+		
+		List<Produtos> produtos = ofertaServico.atualizarApenasDescontos(0.0, listaIds);
+		
+		oferta.getProdutos().removeAll(produtos);
+		
+		ofertaServico.save(oferta);
+		
+		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+	}
+	
 	
 	//#TODO Deletar oferta
 	@DeleteMapping("excluir/{id}")
