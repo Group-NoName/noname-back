@@ -78,12 +78,18 @@ public class PacoteControles {
 		
 		List<String> listaIds = new ArrayList<>();
 		
+		boolean hasCopy = false;
+		String errorLog = "";
 		for (Produtos produto : objDto.getProdutos()) {
-			if(pacote.getProdutos().contains(produto))
-				return new ResponseEntity<>("Produto de id: '" + produto.getId() + "'\ne nome: '" + produtoServico.findById(produto.getId()).getNome() + "' \n já está cadastrado no pacote", HttpStatus.CONFLICT);
+			if(pacote.getProdutos().contains(produto)) {
+				hasCopy = true;
+				errorLog += "\n \n Produto de id: '" + produto.getId() + "'\ne nome: '" + produtoServico.findById(produto.getId()).getNome() + "' \n já está cadastrado no pacote";
+			}
 			listaIds.add(produto.getId());
 		
 		}
+		if(hasCopy)
+			return new ResponseEntity<>(errorLog, HttpStatus.NOT_ACCEPTABLE);
 		List<Produtos> produtos = produtoServico.fromListIds(listaIds);
 		
 		pacote.getProdutos().addAll(produtos);
