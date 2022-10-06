@@ -120,20 +120,27 @@ public class ProdutoControles {
 	}
 	
 	@PutMapping("/adicionar-tag/{id}")
-	public ResponseEntity<Void> adicionarTag(
+	public ResponseEntity<?> adicionarTag(
 			@RequestBody Produtos objDto, 
 			@PathVariable String id){
 		
 		Produtos produto = produtoServico.findById(id);
 
+		boolean hasCopy = false;
+		String errorLog = "";
+		
 		for (Tags tag : objDto.getTags()) 
-			if(produto.getTags().contains(tag)) 
-				return new ResponseEntity<>(HttpStatus.CONFLICT);	
+			if(produto.getTags().contains(tag)) {
+				hasCopy = true;
+				errorLog += "Tag " + tagsServico.findById(tag.getId()).getNome() + " já está cadastrada \n";
+			}
 		
-		
-		produto.getTags().addAll(objDto.getTags());
-		produtoServico.insert(produto);
-		
+		if(hasCopy) {
+			return new ResponseEntity<>(errorLog, HttpStatus.NOT_ACCEPTABLE);
+		}else {
+			produto.getTags().addAll(objDto.getTags());
+			produtoServico.insert(produto);
+		}
 		return new ResponseEntity<>(HttpStatus.ACCEPTED);
 	}
 	 
