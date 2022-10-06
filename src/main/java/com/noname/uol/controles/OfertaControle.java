@@ -58,7 +58,7 @@ public class OfertaControle {
 		
 		ofertaServico.atualizarApenasDescontos(oferta.getDesconto(), listaIds);
 	
-		return new ResponseEntity<>("Oferta cadastrada!", HttpStatus.CREATED);
+		return new ResponseEntity<>("Oferta cadastrada com sucesso", HttpStatus.CREATED);
 	}
 	
 	@PostMapping("inserir-produtos-oferta")
@@ -114,7 +114,7 @@ public class OfertaControle {
 			
 			ofertaServico.save(oferta);
 		}
-		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+		return new ResponseEntity<>("Produtos adicionados com sucesso", HttpStatus.ACCEPTED);
 	}
 	
 	@PutMapping("remover-produto/{id}")
@@ -136,7 +136,7 @@ public class OfertaControle {
 		
 		ofertaServico.save(oferta);
 
-		return ResponseEntity.noContent().build();
+		return new ResponseEntity<>("Produtos removidos com sucesso", HttpStatus.ACCEPTED);
 	}
 	
 	@PutMapping("retirar-todos-produtos/{id}")
@@ -156,13 +156,13 @@ public class OfertaControle {
 		
 		ofertaServico.save(oferta);
 		
-		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+		return new ResponseEntity<>("Produtos retirados com sucesso", HttpStatus.ACCEPTED);
 	}
 	
 	
 	//#TODO Deletar oferta
 	@DeleteMapping("excluir/{id}")
-	public ResponseEntity<Void> deletarOferta(@PathVariable String id){
+	public ResponseEntity<?> deletarOferta(@PathVariable String id){
 
 		Ofertas oferta = ofertaServico.findById(id);
 		
@@ -176,6 +176,6 @@ public class OfertaControle {
 		
 		ofertaServico.delete(id);
 		
-		return ResponseEntity.noContent().build();
+		return new ResponseEntity<>("Oferta excluida com sucesso", HttpStatus.ACCEPTED);
 	}
 }

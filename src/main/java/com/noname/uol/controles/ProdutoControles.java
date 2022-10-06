@@ -98,20 +98,20 @@ public class ProdutoControles {
 	}
 	
 	@DeleteMapping("/excluir/{id}")
-	public ResponseEntity<Void> deletarProduto(@PathVariable String id) {
+	public ResponseEntity<?> deletarProduto(@PathVariable String id) {
 		produtoServico.delete(id);
-		return ResponseEntity.noContent().build();
+		return new ResponseEntity<>("Produto deletado com sucesso!", HttpStatus.ACCEPTED);
 	}
 	
 	@PutMapping("/atualizar/{id}")
-	public ResponseEntity<Void> atualizarProduto(
+	public ResponseEntity<?> atualizarProduto(
 			@RequestBody produtoDTO objDto, 
 			@PathVariable String id){
 		
 		Produtos obj = produtoServico.fromDTO(objDto);
 		obj.setId(id);
 		obj = produtoServico.update(obj);
-		return ResponseEntity.noContent().build();
+		return new ResponseEntity<>("Produto atualizado com sucesso!", HttpStatus.ACCEPTED);
 	}
 	
 	@PutMapping("/adicionar-tag/{id}")
@@ -127,7 +127,7 @@ public class ProdutoControles {
 		for (Tags tag : objDto.getTags()) 
 			if(produto.getTags().contains(tag)) {
 				hasCopy = true;
-				errorLog += "Tag " + tagsServico.findById(tag.getId()).getNome() + " já está cadastrada \n";
+				errorLog += tagsServico.findById(tag.getId()).getNome();
 			}
 		
 		if(hasCopy) {
@@ -136,7 +136,7 @@ public class ProdutoControles {
 			produto.getTags().addAll(objDto.getTags());
 			produtoServico.insert(produto);
 		}
-		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+		return new ResponseEntity<>("Tag adicionada com sucesso", HttpStatus.ACCEPTED);
 	}
 	 
 	@GetMapping("/produtos-quantia/{quantia}")
@@ -149,7 +149,7 @@ public class ProdutoControles {
 									.map(x -> new produtoDTO(x))
 									.limit(Integer.parseInt(quantia))
 									.collect(Collectors.toList());
-		return ResponseEntity.ok().body(produtoDto);
+		return new ResponseEntity<>(produtoDto, HttpStatus.FOUND);
 	}
 	
 }

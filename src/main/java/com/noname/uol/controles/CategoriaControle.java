@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -54,24 +55,38 @@ public class CategoriaControle {
 	}
 	
 	@PostMapping("/cadastro")
-	public ResponseEntity<Void> inserirNovaCategoria(@RequestBody Categorias categoria){
+	public ResponseEntity<?> inserirNovaCategoria(@RequestBody Categorias categoria){
 		Categorias obj = service.insert(categoria);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
 				.buildAndExpand(obj.getId())
 				.toUri();
-		return ResponseEntity.created(uri).build();
+		return new ResponseEntity<>("Categoria cadastrada com sucesso", HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/categorias-produtos/{id}")
-	public ResponseEntity<Void> inserirProduto(
+	public ResponseEntity<?> inserirProduto(
 			@RequestBody Categorias objDto,
 			@PathVariable String id){
 		Categorias categoria = service.findById(id);
-		categoria.getProdutos().addAll(objDto.getProdutos());
-		repo.save(categoria);
-		return ResponseEntity.noContent().build();
+		
+		boolean hasCopy = false;
+		String errorLog = "";
+		for (Produtos produto : objDto.getProdutos()) {
+			if(categoria.getProdutos().contains(produto)) {
+				hasCopy = true;
+				errorLog += serviceProduto.findById(produto.getId()).getNome();
+			}
+		}
+		if(hasCopy) {
+			return new ResponseEntity<>(errorLog, HttpStatus.NOT_ACCEPTABLE);
+		}
+		else {
+			categoria.getProdutos().addAll(objDto.getProdutos());
+			repo.save(categoria);
+			return new ResponseEntity<>("Produtos inseridos com sucesso", HttpStatus.ACCEPTED);
+		}
 	}
 	
 	@PutMapping("/atualizar/{id}")

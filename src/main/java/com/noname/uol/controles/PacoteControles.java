@@ -36,37 +36,37 @@ public class PacoteControles {
 	@GetMapping("/pacotes")
 	public ResponseEntity<List<Pacotes>> obterPacotes(){
 		List<Pacotes> pacotes = pacoteServico.findAll();
-		return ResponseEntity.ok().body(pacotes);
+		return new ResponseEntity<>(pacotes, HttpStatus.FOUND);
 	}
 
 	@GetMapping("/pacote/{id}")
 	public ResponseEntity<Pacotes> obterPacoteId(@PathVariable String id){
 		Pacotes pacote = pacoteServico.findById(id);
-		return ResponseEntity.ok().body(pacote);
+		return new ResponseEntity<>(pacote, HttpStatus.FOUND);
 	}
 	
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirPacote(@RequestBody Pacotes objDto){
 		Pacotes pacote = objDto;
 		pacoteServico.save(pacote);
-		return ResponseEntity.noContent().build();
+		return new ResponseEntity<>("Pacote criado com sucesso", HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/excluir/{id}")
-	public ResponseEntity<Void> deletarPacote(@PathVariable String id){
+	public ResponseEntity<?> deletarPacote(@PathVariable String id){
 		pacoteServico.delete(id);
-		return ResponseEntity.noContent().build();
+		return new ResponseEntity<>("Pacote apagado com sucesso", HttpStatus.ACCEPTED);
 	}
 	
 	@PutMapping("atualizar/{id}")
-	public ResponseEntity<Void> atualizarPacote(
+	public ResponseEntity<?> atualizarPacote(
 			@RequestBody Pacotes objDto,
 			@PathVariable String id){
 		
 		Pacotes obj = objDto;
 		obj.setId(id);
 		obj = pacoteServico.update(obj);
-		return ResponseEntity.noContent().build();
+		return new ResponseEntity<>("Pacote atualizado com sucesso", HttpStatus.ACCEPTED);
 	}
 	
 	@PutMapping("inserir-produto/{id}")
@@ -96,7 +96,7 @@ public class PacoteControles {
 	
 		pacoteServico.save(pacote);
 		
-		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+		return new ResponseEntity<>("Produtos inseridos com sucesso no pacote", HttpStatus.ACCEPTED);
 	}
 	
 	@PutMapping("remover-produto/{id}")
@@ -119,6 +119,6 @@ public class PacoteControles {
 		
 		pacoteServico.save(pacote);
 		
-		return ResponseEntity.noContent().build();
+		return new ResponseEntity<>("Produtos removidos do pacote com sucesso", HttpStatus.ACCEPTED);	
 	}
 }
