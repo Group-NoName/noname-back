@@ -83,7 +83,7 @@ public class PacoteControles {
 		for (Produtos produto : objDto.getProdutos()) {
 			if(pacote.getProdutos().contains(produto)) {
 				hasCopy = true;
-				errorLog += "Produto '" + produtoServico.findById(produto.getId()).getNome() + "' já está cadastrado no pacote \n";
+				errorLog += produtoServico.findById(produto.getId()).getNome();
 			}
 			listaIds.add(produto.getId());
 		

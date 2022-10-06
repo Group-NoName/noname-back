@@ -97,7 +97,7 @@ public class OfertaControle {
 		{
 			if(oferta.getProdutos().contains(produto)) {
 				hasCopy = true;
-				errorLog += "Produto '" + produtoServico.findById(produto.getId()).getNome() + "' já está cadastrado na oferta \n";
+				errorLog += produtoServico.findById(produto.getId()).getNome();
 			}
 			
 			listaIds.add(produto.getId());
