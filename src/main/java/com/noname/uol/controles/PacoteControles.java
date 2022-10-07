@@ -36,13 +36,13 @@ public class PacoteControles {
 	@GetMapping("/pacotes")
 	public ResponseEntity<List<Pacotes>> obterPacotes(){
 		List<Pacotes> pacotes = pacoteServico.findAll();
-		return new ResponseEntity<>(pacotes, HttpStatus.FOUND);
+		return new ResponseEntity<>(pacotes, HttpStatus.ACCEPTED);
 	}
 
 	@GetMapping("/pacote/{id}")
 	public ResponseEntity<Pacotes> obterPacoteId(@PathVariable String id){
 		Pacotes pacote = pacoteServico.findById(id);
-		return new ResponseEntity<>(pacote, HttpStatus.FOUND);
+		return new ResponseEntity<>(pacote, HttpStatus.ACCEPTED);
 	}
 	
 	@PostMapping("/cadastro")

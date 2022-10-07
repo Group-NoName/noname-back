@@ -85,7 +85,7 @@ public class CategoriaControle {
 		else {
 			categoria.getProdutos().addAll(objDto.getProdutos());
 			repo.save(categoria);
-			return new ResponseEntity<>("Produtos inseridos com sucesso", HttpStatus.ACCEPTED);
+			return new ResponseEntity<>("Produtos inseridos com sucesso", HttpStatus.CREATED);
 		}
 	}
 	
