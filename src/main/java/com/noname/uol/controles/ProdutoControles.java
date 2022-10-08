@@ -93,6 +93,14 @@ public class ProdutoControles {
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirProduto(@RequestBody produtoDTO objDto){
 		Produtos produto = produtoServico.fromDTO(objDto);
+		
+		for (Produtos produtoObj : produtoServico.findAll()) {
+			if(produto.getNome().equals(produtoObj.getNome())) {
+				return new ResponseEntity<>("Produto não pode ter nome repetido", HttpStatus.CONFLICT);
+			}
+		}
+		
+		
 		produto = produtoServico.insert(produto);
 		return new ResponseEntity<>("Produto cadastrado com sucesso!", HttpStatus.CREATED);
 	}

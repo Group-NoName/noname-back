@@ -29,6 +29,16 @@ public class TagsServico {
 	public Tags insert(Tags obj) {
 		return repositorio.save(obj);
 	}
+	public Tags update(Tags obj) {
+		Tags newObj = findById(obj.getId());
+		updateData(newObj, obj);
+		return repositorio.save(newObj);
+	}
+	
+	private void updateData(Tags newObj, Tags obj) {
+		newObj.setNome(obj.getNome());
+		newObj.setProdutos(obj.getProdutos());
+	}
 	
 	public void delete(String id) {
 		findById(id);

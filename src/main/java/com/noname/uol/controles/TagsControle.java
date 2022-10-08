@@ -1,5 +1,6 @@
 package com.noname.uol.controles;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.lang.Void;
 import java.net.URI;
@@ -62,6 +63,23 @@ public class TagsControle {
 				.buildAndExpand(obj.getId())
 				.toUri();
 		return new ResponseEntity<>("Tag cadastrada com sucesso", HttpStatus.ACCEPTED);
+	}
+	
+	@PutMapping("/atualizar/{id}")
+	public ResponseEntity<?> atualizarTag(@PathVariable String id, @RequestBody Tags tag){
+		
+		for (Tags tagObj: tagServico.findAll()) {
+			if(tagObj.getNome().equals(tag.getNome()))
+				return new ResponseEntity<>("Nome de tag não pode ser repetido", HttpStatus.CONFLICT);
+		}
+		
+		List<Produtos> produtos = new ArrayList<>();
+		produtos.addAll(tagServico.findById(id).getProdutos());
+		
+		tag.setId(id);
+		tag.setProdutos(produtos);
+		tag = tagServico.update(tag);
+		return new ResponseEntity<>("Tag atualizada com sucesso", HttpStatus.ACCEPTED);
 	}
 	
 	@DeleteMapping("/excluir/{id}")
