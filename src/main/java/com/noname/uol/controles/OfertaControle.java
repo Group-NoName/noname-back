@@ -49,18 +49,29 @@ public class OfertaControle {
 	
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirOferta(@RequestBody Ofertas oferta){
-		Ofertas obj = ofertaServico.insert(oferta);
 		
 		Double desconto = 1 - (oferta.getDesconto()/100);
 		
 		List<String> listaIds = new ArrayList<>();
 		
-		for (Produtos produto : oferta.getProdutos()) 
-			listaIds.add(produto.getId());
+		boolean hasProduct = false;
+		String errorLog = "";
 		
-		ofertaServico.atualizarPrecosDescontos(desconto, listaIds);
-	
-		return new ResponseEntity<>("Oferta cadastrada com sucesso", HttpStatus.CREATED);
+		for (Produtos produto : oferta.getProdutos()) {
+			if(produtoServico.hasDescount(produto.getId())) {
+				hasProduct = true;
+				errorLog += produtoServico.findById(produto.getId()).getNome() + " ";
+			}
+			listaIds.add(produto.getId());
+		}
+		if(hasProduct == true) {
+			return new ResponseEntity<>(errorLog, HttpStatus.CONFLICT);
+		}else {
+			ofertaServico.atualizarPrecosDescontos(desconto, listaIds);
+			Ofertas obj = ofertaServico.insert(oferta);
+		
+			return new ResponseEntity<>("Oferta cadastrada com sucesso", HttpStatus.CREATED);
+		}	
 	}
 	
 	@PostMapping("inserir-produtos-oferta")
@@ -170,15 +181,16 @@ public class OfertaControle {
 	public ResponseEntity<?> deletarOferta(@PathVariable String id){
 
 		Ofertas oferta = ofertaServico.findById(id);
-		
+
 		List<String> listaIds = new ArrayList<>();
 		
 		//#TODO Otimização
 		for (Produtos produto : oferta.getProdutos()) 
-			listaIds.add(produto.getId());
+			if(produto != null)
+				listaIds.add(produto.getId());
 			
 		ofertaServico.atualizarPrecosDescontos(0, listaIds);
-		
+
 		ofertaServico.delete(id);
 		
 		return new ResponseEntity<>("Oferta excluida com sucesso", HttpStatus.ACCEPTED);
