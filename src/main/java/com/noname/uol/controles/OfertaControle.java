@@ -51,12 +51,14 @@ public class OfertaControle {
 	public ResponseEntity<?> inserirOferta(@RequestBody Ofertas oferta){
 		Ofertas obj = ofertaServico.insert(oferta);
 		
+		Double desconto = 1 - (oferta.getDesconto()/100);
+		
 		List<String> listaIds = new ArrayList<>();
 		
 		for (Produtos produto : oferta.getProdutos()) 
 			listaIds.add(produto.getId());
 		
-		ofertaServico.atualizarApenasDescontos(oferta.getDesconto(), listaIds);
+		ofertaServico.atualizarPrecosDescontos(desconto, listaIds);
 	
 		return new ResponseEntity<>("Oferta cadastrada com sucesso", HttpStatus.CREATED);
 	}
@@ -95,6 +97,8 @@ public class OfertaControle {
 		
 		for (Produtos produto : objDto.getProdutos()) 
 		{
+			if(produtoServico.hasDescount(produto.getId()))
+				return new ResponseEntity<>(produto, HttpStatus.CONFLICT);
 			if(oferta.getProdutos().contains(produto)) {
 				hasCopy = true;
 				errorLog += produtoServico.findById(produto.getId()).getNome();
@@ -149,6 +153,7 @@ public class OfertaControle {
 		//#TODO Otimização
 		for (Produtos produto : produtoServico.findAll()) 
 			listaIds.add(produto.getId());
+		
 		
 		List<Produtos> produtos = ofertaServico.atualizarApenasDescontos(0.0, listaIds);
 		
