@@ -56,6 +56,11 @@ public class CategoriaControle {
 	
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirNovaCategoria(@RequestBody Categorias categoria){
+
+		for (Categorias categoriaObj : service.findAll()) {
+			if(categoriaObj.getNome().equals(categoria.getNome()))
+				return new ResponseEntity<>("Nome de categoria não pode ser repetido", HttpStatus.CONFLICT);
+		}
 		Categorias obj = service.insert(categoria);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -63,6 +68,7 @@ public class CategoriaControle {
 				.buildAndExpand(obj.getId())
 				.toUri();
 		return new ResponseEntity<>("Categoria cadastrada com sucesso", HttpStatus.CREATED);
+		
 	}
 	
 	@PutMapping("/categorias-produtos/{id}")

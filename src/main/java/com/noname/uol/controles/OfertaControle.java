@@ -50,13 +50,14 @@ public class OfertaControle {
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirOferta(@RequestBody Ofertas oferta){
 		
+		//#TODO organização
+		
 		Double desconto = 1 - (oferta.getDesconto()/100);
 		
 		List<String> listaIds = new ArrayList<>();
 		
 		boolean hasProduct = false;
 		String errorLog = "";
-		
 		for (Produtos produto : oferta.getProdutos()) {
 			if(produtoServico.hasDescount(produto.getId())) {
 				hasProduct = true;
@@ -104,16 +105,16 @@ public class OfertaControle {
 		List<String> listaIds = new ArrayList<>();
 		
 		boolean hasCopy = false;
-		String errorLog = "";
+		List<Produtos> errorLog = new ArrayList<>();
 		
 		for (Produtos produto : objDto.getProdutos()) 
 		{
-			if(produtoServico.hasDescount(produto.getId()))
-				return new ResponseEntity<>(produto, HttpStatus.CONFLICT);
 			if(oferta.getProdutos().contains(produto)) {
 				hasCopy = true;
-				errorLog += produtoServico.findById(produto.getId()).getNome();
-			}
+				errorLog.add(produtoServico.findById(produto.getId()));
+			}else if(produtoServico.hasDescount(produto.getId())) 
+				return new ResponseEntity<>(produtoServico.findById(produto.getId()), HttpStatus.CONFLICT);
+				
 			
 			listaIds.add(produto.getId());
 		}

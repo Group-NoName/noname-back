@@ -49,6 +49,12 @@ public class TagsControle {
 	
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirNovaTag(@RequestBody Tags tag){
+		
+		for (Tags tagObj: tagServico.findAll()) {
+			if(tagObj.getNome().equals(tag.getNome()))
+				return new ResponseEntity<>("Nome de tag não pode ser repetido", HttpStatus.CONFLICT);
+		}
+		
 		Tags obj = tagServico.insert(tag);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
