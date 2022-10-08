@@ -5,6 +5,7 @@ import java.lang.Void;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,34 +38,34 @@ public class TagsControle {
 	@GetMapping("/tags")
 	public ResponseEntity<List<Tags>> obterTags(){
 		List<Tags> tags = tagServico.findAll();
-		return ResponseEntity.ok().body(tags);
+		return new ResponseEntity<>(tags, HttpStatus.ACCEPTED);
 	}
 	
 	@GetMapping("/tags/{id}")
 	public ResponseEntity<Tags> obterTagId(@PathVariable String id){
 		Tags tag = tagServico.findById(id);
-		return ResponseEntity.ok().body(tag);
+		return new ResponseEntity<>(tag, HttpStatus.ACCEPTED);
 	}
 	
 	@PostMapping("/cadastro")
-	public ResponseEntity<Void> inserirNovaTag(@RequestBody Tags tag){
+	public ResponseEntity<?> inserirNovaTag(@RequestBody Tags tag){
 		Tags obj = tagServico.insert(tag);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
 				.buildAndExpand(obj.getId())
 				.toUri();
-		return ResponseEntity.created(uri).build();
+		return new ResponseEntity<>("Tag cadastrada com sucesso", HttpStatus.ACCEPTED);
 	}
 	
 	@DeleteMapping("/excluir/{id}")
-	public ResponseEntity<Void> deletarTag(@PathVariable String id){
+	public ResponseEntity<?> deletarTag(@PathVariable String id){
 		tagServico.delete(id);
-		return ResponseEntity.noContent().build();
+		return new ResponseEntity<>("Tag excluida com sucesso", HttpStatus.ACCEPTED);
 	}
 	
 	@DeleteMapping("/tag-produtos/{tagId}/{produtoId}")
-	public ResponseEntity<Void> deleteRelacao(
+	public ResponseEntity<?> deleteRelacao(
 											@PathVariable String tagId,
 											@PathVariable String produtoId){
 		
@@ -74,7 +75,7 @@ public class TagsControle {
 		produtoServico.save(produto);
 		tag.getProdutos().remove(produto);
 		tagServico.insert(tag);
-		return ResponseEntity.noContent().build();
+		return new ResponseEntity<>("Tag excluida do produto com sucesso", HttpStatus.ACCEPTED);
 	}
 	
 	

@@ -46,13 +46,13 @@ public class ProdutoControles {
 									.stream()
 									.map(x -> new produtoDTO(x))
 									.collect(Collectors.toList());
-		return ResponseEntity.ok().body(produtoDto);
+		return new ResponseEntity<>(produtoDto, HttpStatus.ACCEPTED);
 	}
 	
 	@GetMapping("/produtos/{id}")
 	public ResponseEntity<produtoDTO> obterProdutoId(@PathVariable String id) {
 		Produtos produto = produtoServico.findById(id);
-		return  ResponseEntity.ok().body(new produtoDTO(produto));
+		return new ResponseEntity<>(new produtoDTO(produto), HttpStatus.ACCEPTED);
 	}
 	
 	@GetMapping("/produtos-semelhantes/{id}/{quantia}")
@@ -87,7 +87,7 @@ public class ProdutoControles {
 				.limit(Integer.parseInt(quantia))
 				.collect(Collectors.toList());		
 		
-		return ResponseEntity.ok().body(produtoDto);
+		return new ResponseEntity<>(produtoDto, HttpStatus.ACCEPTED);
 	}
 	 
 	@PostMapping("/cadastro")

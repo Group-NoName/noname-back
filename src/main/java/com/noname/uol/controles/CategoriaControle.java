@@ -90,30 +90,30 @@ public class CategoriaControle {
 	}
 	
 	@PutMapping("/atualizar/{id}")
-	public ResponseEntity<Void> update(
+	public ResponseEntity<?> update(
 			@PathVariable String id,
 			@RequestBody Categorias categorias){
 		Categorias ids = service.body(categorias);
 		ids.setId(id);
 		ids = service.update(ids);
-		return ResponseEntity.noContent().build();
+		return new ResponseEntity<>("Categoria atualizada com sucesso", HttpStatus.ACCEPTED);
 	}
 	
 	@DeleteMapping("/categorias-produtos/{categoriaId}/{produtoId}")
-	public ResponseEntity<Void> deletarRelacaoCategoriaProduto(
+	public ResponseEntity<?> deletarRelacaoCategoriaProduto(
 			@PathVariable String categoriaId,
 			@PathVariable String produtoId){
 		Categorias categoria = service.findById(categoriaId);
 		Produtos produto = serviceProduto.findById(produtoId);
 		categoria.getProdutos().remove(produto);
 		repo.save(categoria);
-		return ResponseEntity.noContent().build();
+		return new ResponseEntity<>("Produtos removidos da categoria com sucesso", HttpStatus.ACCEPTED);
 	}
 	
 	@DeleteMapping("/excluir/{id}")
-	public ResponseEntity<Void> deletarCategoria(@PathVariable String id){
+	public ResponseEntity<?> deletarCategoria(@PathVariable String id){
 		service.delete(id);
-		return ResponseEntity.noContent().build();
+		return new ResponseEntity<>("Categoria removida com sucesso", HttpStatus.ACCEPTED);
 	}
 	
 }

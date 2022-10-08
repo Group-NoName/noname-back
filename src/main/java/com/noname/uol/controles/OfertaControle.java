@@ -38,13 +38,13 @@ public class OfertaControle {
 	@GetMapping("/ofertas")
 	public ResponseEntity<List<Ofertas>> obterOfertas(){
 		List<Ofertas> oferta = ofertaServico.findAll();
-		return ResponseEntity.ok().body(oferta);
+		return new ResponseEntity<>(oferta, HttpStatus.ACCEPTED);
 	}
 	
 	@GetMapping("/ofertas/{id}")
 	public ResponseEntity<Ofertas> obterOfertaPorId(@PathVariable String id){
 		Ofertas oferta = ofertaServico.findById(id);
-		return ResponseEntity.ok().body(oferta);
+		return new ResponseEntity<>(oferta, HttpStatus.ACCEPTED);
 	}
 	
 	@PostMapping("/cadastro")
@@ -90,7 +90,7 @@ public class OfertaControle {
 		
 		ofertaServico.save(oferta);
 		
-		return ResponseEntity.ok().body(desconto);
+		return new ResponseEntity<>("Descontos dos produtos atualizados com sucesso", HttpStatus.ACCEPTED);
 	}
 	
 	
