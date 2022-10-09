@@ -158,7 +158,7 @@ public class ProdutoControles {
 									.map(x -> new produtoDTO(x))
 									.limit(Integer.parseInt(quantia))
 									.collect(Collectors.toList());
-		return new ResponseEntity<>(produtoDto, HttpStatus.FOUND);
+		return new ResponseEntity<>(produtoDto, HttpStatus.ACCEPTED);
 	}
 	
 }

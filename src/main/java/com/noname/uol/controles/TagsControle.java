@@ -101,12 +101,5 @@ public class TagsControle {
 		tagServico.insert(tag);
 		return new ResponseEntity<>("Tag excluida do produto com sucesso", HttpStatus.ACCEPTED);
 	}
-	@PutMapping("/atualizar/{tagId}")
-	public ResponseEntity<Void> atualizar(@PathVariable String tagId, @RequestBody Tags body){
-		Tags tag = tagServico.body(body);
-		tag.setId(tagId);
-		tag = tagServico.update(tag);
-		return ResponseEntity.noContent().build();	
-		}
-	
+
 }
