@@ -10,47 +10,32 @@ import javax.persistence.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 
 @Data
 @Document
-public class Produtos implements Serializable {
+public class Ofertas implements Serializable{
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	private String id;
 	
-	private String nome;
-
-	private String descricao;
-
-	private Double preco;
-	
-	private List<Images> images;
-	
 	private Double desconto;
 	
+	@JsonIgnoreProperties(value = {"tags", "descricao", "images"})
 	@DBRef(lazy = true)
-	private List<Tags> tags = new ArrayList<>();
+	private List<Produtos> produtos = new ArrayList<>();
 	
-	public Produtos() {}
-	
-	public Produtos(String id, String nome, String descricao, List<Images> images, List<Tags> tags, Double preco, Double desconto) {
+	public Ofertas() {}
+	public Ofertas(String id, Double desconto, List<Produtos> produtos) {
 		super();
 		this.id = id;
-		this.nome = nome;
-		this.descricao = descricao;
-		this.preco = preco;
-		this.images = images;
-		this.tags = tags;
 		this.desconto = desconto;
+		this.produtos = produtos;
 	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -59,12 +44,12 @@ public class Produtos implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Produtos other = (Produtos) obj;
+		Ofertas other = (Ofertas) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	public void AddToTagList(Tags tag) {
-		tags.add(tag);
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 	
 }

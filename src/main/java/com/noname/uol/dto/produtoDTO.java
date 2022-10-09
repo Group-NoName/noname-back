@@ -20,6 +20,7 @@ public class produtoDTO implements Serializable{
 	private Double preco;
 	private List<Images> images = new ArrayList<>();
 	private List<Tags> tags = new ArrayList<>();
+	private Double desconto;
 	
 	public produtoDTO() {
 		
@@ -33,6 +34,7 @@ public class produtoDTO implements Serializable{
 		preco = obj.getPreco();
 		images = obj.getImages();
 		tags = obj.getTags();
+		desconto = obj.getDesconto();
 	}
 
 }

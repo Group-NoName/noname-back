@@ -1,10 +1,12 @@
 package com.noname.uol.controles;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.lang.Void;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,7 +27,7 @@ import com.noname.uol.servicos.TagsServico;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/tags")
+@RequestMapping("/tag")
 public class TagsControle {
 
 	@Autowired
@@ -35,36 +37,59 @@ public class TagsControle {
 	private ProdutoServico produtoServico;
 	
 	@GetMapping("/tags")
-	public ResponseEntity<List<Tags>> getAllTags(){
+	public ResponseEntity<List<Tags>> obterTags(){
 		List<Tags> tags = tagServico.findAll();
-		return ResponseEntity.ok().body(tags);
+		return new ResponseEntity<>(tags, HttpStatus.ACCEPTED);
 	}
 	
 	@GetMapping("/tags/{id}")
-	public ResponseEntity<Tags> GetTagById(@PathVariable String id){
+	public ResponseEntity<Tags> obterTagId(@PathVariable String id){
 		Tags tag = tagServico.findById(id);
-		return ResponseEntity.ok().body(tag);
+		return new ResponseEntity<>(tag, HttpStatus.ACCEPTED);
 	}
 	
-	@PostMapping("/inserir")
-	public ResponseEntity<Void> InsertNewTag(@RequestBody Tags tag){
+	@PostMapping("/cadastro")
+	public ResponseEntity<?> inserirNovaTag(@RequestBody Tags tag){
+		
+		for (Tags tagObj: tagServico.findAll()) {
+			if(tagObj.getNome().equals(tag.getNome()))
+				return new ResponseEntity<>("Nome de tag não pode ser repetido", HttpStatus.CONFLICT);
+		}
+		
 		Tags obj = tagServico.insert(tag);
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
 				.buildAndExpand(obj.getId())
 				.toUri();
-		return ResponseEntity.created(uri).build();
+		return new ResponseEntity<>("Tag cadastrada com sucesso", HttpStatus.ACCEPTED);
+	}
+	
+	@PutMapping("/atualizar/{id}")
+	public ResponseEntity<?> atualizarTag(@PathVariable String id, @RequestBody Tags tag){
+		
+		for (Tags tagObj: tagServico.findAll()) {
+			if(tagObj.getNome().equals(tag.getNome()))
+				return new ResponseEntity<>("Nome de tag não pode ser repetido", HttpStatus.CONFLICT);
+		}
+		
+		List<Produtos> produtos = new ArrayList<>();
+		produtos.addAll(tagServico.findById(id).getProdutos());
+		
+		tag.setId(id);
+		tag.setProdutos(produtos);
+		tag = tagServico.update(tag);
+		return new ResponseEntity<>("Tag atualizada com sucesso", HttpStatus.ACCEPTED);
 	}
 	
 	@DeleteMapping("/excluir/{id}")
-	public ResponseEntity<Void> DeleteTag(@PathVariable String id){
+	public ResponseEntity<?> deletarTag(@PathVariable String id){
 		tagServico.delete(id);
-		return ResponseEntity.noContent().build();
+		return new ResponseEntity<>("Tag excluida com sucesso", HttpStatus.ACCEPTED);
 	}
 	
 	@DeleteMapping("/tag-produtos/{tagId}/{produtoId}")
-	public ResponseEntity<Void> deleteRelacao(
+	public ResponseEntity<?> deleteRelacao(
 											@PathVariable String tagId,
 											@PathVariable String produtoId){
 		
@@ -74,7 +99,7 @@ public class TagsControle {
 		produtoServico.save(produto);
 		tag.getProdutos().remove(produto);
 		tagServico.insert(tag);
-		return ResponseEntity.noContent().build();
+		return new ResponseEntity<>("Tag excluida do produto com sucesso", HttpStatus.ACCEPTED);
 	}
 	@PutMapping("/atualizar/{tagId}")
 	public ResponseEntity<Void> atualizar(@PathVariable String tagId, @RequestBody Tags body){

@@ -1,5 +1,6 @@
 package com.noname.uol.servicos;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
@@ -52,7 +53,7 @@ public class ProdutoServico {
 	}
 	
 	public Produtos fromDTO(produtoDTO objDto) {
-		return new Produtos(objDto.getId(), objDto.getNome(),  objDto.getDescricao(), objDto.getImages(), objDto.getTags(), objDto.getPreco());
+		return new Produtos(objDto.getId(), objDto.getNome(),  objDto.getDescricao(), objDto.getImages(), objDto.getTags(), objDto.getPreco(), objDto.getDesconto());
 	}
 	
 	public List<Produtos> fromTagProduto(List<TagProduto> listTagProduto) {
@@ -62,9 +63,27 @@ public class ProdutoServico {
 		return obj;
 	}
 	
+	public List<Produtos> fromListIds(List<String> listId){
+		List<Produtos> obj = new ArrayList<>();
+		for (String string : listId)
+			obj.add(findById(string));
+		
+		return obj;
+
+	}
+	
+	public boolean hasDescount(String productId) {
+		if(findById(productId).getDesconto() != 0) return true;
+		
+		return false;
+	}
+	
+	
 	public void save(Produtos produto) {
 		repositorio.save(produto);
 	}
-	
+	public void resetar(String id, Double number) {
+		findById(id).setDesconto(number);;	
+	}
 	
 }

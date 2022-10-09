@@ -22,13 +22,13 @@ public class Tags {
 	
 	@Id
 	private String id;
-
-	private String nome;
 	
-	@JsonIgnoreProperties(value = {"tags", "descricao"})
+	private String nome;
+
+@JsonIgnoreProperties(value = {"tags", "descricao"})
 	@DBRef
 	private List<Produtos> produtos = new ArrayList<>();
-	
+
 	public Tags() {}
 	public Tags(String id, String nome, List<Produtos> produtos) {
 		super();
