@@ -1,7 +1,9 @@
 package com.noname.uol.controles;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -77,14 +79,22 @@ public class CategoriaControle {
 			@PathVariable String id){
 		Categorias categoria = service.findById(id);
 		
+		for (Categorias categoriaObj : service.findAll()) {
+			if(!Collections.disjoint(categoriaObj.getProdutos(), objDto.getProdutos())) {
+				return new ResponseEntity<>("Produto já está em outra categoria", HttpStatus.NOT_ACCEPTABLE);
+			}
+		}
 		boolean hasCopy = false;
 		String errorLog = "";
+		
 		for (Produtos produto : objDto.getProdutos()) {
+		
 			if(categoria.getProdutos().contains(produto)) {
 				hasCopy = true;
 				errorLog += serviceProduto.findById(produto.getId()).getNome();
 			}
 		}
+		
 		if(hasCopy) {
 			return new ResponseEntity<>(errorLog, HttpStatus.NOT_ACCEPTABLE);
 		}

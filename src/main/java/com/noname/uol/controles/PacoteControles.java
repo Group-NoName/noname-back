@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.noname.uol.entidades.Categorias;
 import com.noname.uol.entidades.Pacotes;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.servicos.PacoteServico;
@@ -46,8 +47,11 @@ public class PacoteControles {
 	}
 	
 	@PostMapping("/cadastro")
-	public ResponseEntity<?> inserirPacote(@RequestBody Pacotes objDto){
-		Pacotes pacote = objDto;
+	public ResponseEntity<?> inserirPacote(@RequestBody Pacotes pacote){
+		for (Pacotes pacoteObj : pacoteServico.findAll()) {
+			if(pacoteObj.getNome().equals(pacote.getNome()))
+				return new ResponseEntity<>("Nome de pacote não pode ser repetido", HttpStatus.CONFLICT);
+		}
 		pacoteServico.save(pacote);
 		return new ResponseEntity<>("Pacote criado com sucesso", HttpStatus.CREATED);
 	}
