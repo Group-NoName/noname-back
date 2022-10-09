@@ -28,7 +28,7 @@ public class Produtos implements Serializable {
 	
 	private List<Images> images;
 	
-	private Double desconto;
+	private Double desconto = 0.0;
 	
 	@DBRef(lazy = true)
 	private List<Tags> tags = new ArrayList<>();
