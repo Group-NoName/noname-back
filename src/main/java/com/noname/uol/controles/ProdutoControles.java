@@ -57,6 +57,7 @@ public class ProdutoControles {
 	
 	@GetMapping("/produtos-semelhantes/{id}/{quantia}")
 	public ResponseEntity<List<produtoDTO>> obterProdutosSemelhantes(@PathVariable String id, @PathVariable String quantia){
+
 		List<Tags> tagsProdutoAlvo = produtoServico.findById(id).getTags();
 		List<Produtos> todosOsProdutos = produtoServico.findAll();
 		List<TagProduto> todasTagProdutos = new ArrayList<>();
@@ -128,7 +129,6 @@ public class ProdutoControles {
 			@PathVariable String id){
 		
 		Produtos produto = produtoServico.findById(id);
-
 		boolean hasCopy = false;
 		String errorLog = "";
 		
@@ -145,6 +145,7 @@ public class ProdutoControles {
 			produtoServico.insert(produto);
 		}
 		return new ResponseEntity<>("Tag adicionada com sucesso", HttpStatus.ACCEPTED);
+
 	}
 	 
 	@GetMapping("/produtos-quantia/{quantia}")

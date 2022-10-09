@@ -14,6 +14,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 
+
+
 @Data
 @Document
 public class Tags {
@@ -23,7 +25,7 @@ public class Tags {
 	
 	private String nome;
 
-	@JsonIgnoreProperties(value = {"tags", "descricao"})
+@JsonIgnoreProperties(value = {"tags", "descricao"})
 	@DBRef
 	private List<Produtos> produtos = new ArrayList<>();
 
