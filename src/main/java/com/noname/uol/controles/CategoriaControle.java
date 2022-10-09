@@ -1,6 +1,7 @@
 package com.noname.uol.controles;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,12 @@ public class CategoriaControle {
 			@RequestBody Categorias objDto,
 			@PathVariable String id){
 		Categorias categoria = service.findById(id);
+		
+		for (Categorias categoriaObj : service.findAll()) {
+			if(!Collections.disjoint(objDto.getProdutos(), categoriaObj.getProdutos()))
+				return new ResponseEntity<>("Produto não pode ser repetido em duas categorias", HttpStatus.CONFLICT);
+		}
+		
 		
 		boolean hasCopy = false;
 		String errorLog = "";
