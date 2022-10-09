@@ -53,7 +53,7 @@ public class PacoteControles {
 				return new ResponseEntity<>("Nome de pacote não pode ser repetido", HttpStatus.CONFLICT);
 		}
 		pacoteServico.save(pacote);
-		return new ResponseEntity<>("Pacote criado com sucesso", HttpStatus.CREATED);
+		return new ResponseEntity<>("Pacote criado com sucesso", HttpStatus.CREATED); 
 	}
 	
 	@DeleteMapping("/excluir/{id}")
