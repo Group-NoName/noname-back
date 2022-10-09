@@ -45,6 +45,10 @@ IDE recomendadas
 ![image](https://user-images.githubusercontent.com/88253613/190940987-2969fe5a-6647-4696-aae2-9f1875cad129.png)
 # Rota das Tags
 ![image](https://user-images.githubusercontent.com/88253613/190941020-985a8aef-715e-47c1-8647-ac2b42e51f9e.png)
+# Rota das Ofertas
+![image](https://user-images.githubusercontent.com/90697121/194782074-f0b57aeb-a3de-422b-9087-d42bd2cce3e7.png)
+# Rota dos Pacotes
+![image](https://user-images.githubusercontent.com/90697121/194782013-6d3eaf56-586d-487e-ba6a-3554bf1bd885.png)
 
 → [Voltar ao topo](#topo)
 
