@@ -30,11 +30,6 @@ public class TagsServico {
 	public Tags insert(Tags obj) {
 		return repositorio.save(obj);
 	}
-	public Tags update(Tags obj) {
-		Tags newObj = findById(obj.getId());
-		updateData(newObj, obj);
-		return repositorio.save(newObj);
-	}
 	
 	private void updateData(Tags newObj, Tags obj) {
 		newObj.setNome(obj.getNome());
@@ -54,10 +49,6 @@ public class TagsServico {
 	public Tags body(Tags obj) {
 		return new Tags(obj.getId(), obj.getNome(), obj.getProdutos());
 		
-	}
-	public void updateData(Tags newObj, Tags obj) {
-		newObj.setNome(obj.getNome());
-		newObj.getProdutos();
 	}
 	public String tagToString(List<Tags> tags) {
 		

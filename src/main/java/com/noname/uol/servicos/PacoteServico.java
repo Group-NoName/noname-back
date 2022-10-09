@@ -42,6 +42,5 @@ public class PacoteServico {
 		newObj.setDescricao(obj.getDescricao());
 		newObj.setPreco(obj.getPreco());
 		newObj.setImages(obj.getImages());
-		newObj.setProdutos(obj.getProdutos());
 	}
 }
