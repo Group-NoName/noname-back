@@ -24,9 +24,12 @@ import com.noname.uol.entidades.Produtos;
 import com.noname.uol.servicos.OfertasServico;
 import com.noname.uol.servicos.ProdutoServico;
 
+import io.swagger.annotations.Api;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/oferta")
+@Api(value="oferta")
 public class OfertaControle {
 	
 	@Autowired

@@ -24,9 +24,12 @@ import com.noname.uol.repositorios.CategoriaRepositorio;
 import com.noname.uol.servicos.CategoriasServico;
 import com.noname.uol.servicos.ProdutoServico;
 
+import io.swagger.annotations.Api;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/categoria")
+@Api(value="categoria")
 public class CategoriaControle {
 	
 	
@@ -36,6 +39,7 @@ public class CategoriaControle {
 	private CategoriaRepositorio repo;
 	@Autowired
 	private ProdutoServico serviceProduto;
+	
 	
 	@GetMapping("/categorias")
 	public ResponseEntity<List<Categorias>> obterTodasCategorias(){

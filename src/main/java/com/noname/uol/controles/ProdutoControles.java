@@ -22,6 +22,7 @@ import com.noname.uol.entidades.Produtos;
 import com.noname.uol.servicos.ProdutoServico;
 import com.noname.uol.servicos.TagsServico;
 
+import io.swagger.annotations.Api;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 @CrossOrigin
 @RestController
 @RequestMapping("/produto")
+@Api(value="produto")
 public class ProdutoControles {
 	
 	@Autowired

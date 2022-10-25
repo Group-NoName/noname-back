@@ -21,9 +21,12 @@ import com.noname.uol.entidades.Pacotes;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.servicos.PacoteServico;
 import com.noname.uol.servicos.ProdutoServico;
+
+import io.swagger.annotations.Api;
 @CrossOrigin
 @RestController
 @RequestMapping("/pacote")
+@Api(value="pacote")
 public class PacoteControles {
 
 	@Autowired

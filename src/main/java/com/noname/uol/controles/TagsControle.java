@@ -25,9 +25,12 @@ import com.noname.uol.entidades.Tags;
 import com.noname.uol.servicos.ProdutoServico;
 import com.noname.uol.servicos.TagsServico;
 
+import io.swagger.annotations.Api;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/tag")
+@Api(value="tag")
 public class TagsControle {
 
 	@Autowired
