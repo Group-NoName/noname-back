@@ -11,7 +11,7 @@ public class UsuarioSelecionadorEmailUsuario implements UserSelecionador<UserMod
 	public UserModel select(List<UserModel> usuarios, String email) {
 		UserModel selecionado = null;
 		for (UserModel usuario : usuarios) {
-			if (usuario.getEmail().equals(email)) {
+			if (usuario.getCredencial().getEmail().equals(email)) {
 				selecionado = usuario;
 			}
 		}

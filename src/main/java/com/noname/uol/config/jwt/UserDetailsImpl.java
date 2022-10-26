@@ -7,12 +7,8 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.noname.uol.entidades.Role;
-import com.noname.uol.entidades.UserModel;
-import com.noname.uol.enums.Roles;
 
 public class UserDetailsImpl implements UserDetails {
 	private static final long serialVersionUID = 1L;

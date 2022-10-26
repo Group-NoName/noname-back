@@ -14,10 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import com.noname.uol.config.jwt.UserDetailsImpl;
-import com.noname.uol.repositorios.UserRepositorio;
-
-
 public class TokenFilter extends BasicAuthenticationFilter {
 
 	private TokenService tokenService;
@@ -48,7 +44,9 @@ public class TokenFilter extends BasicAuthenticationFilter {
 	private UsernamePasswordAuthenticationToken getAuthentication(String jwtToken) {
 		if (tokenService.validateToken(jwtToken)) {
 			String nomeUsuario = tokenService.getUsername(jwtToken);
+			System.out.println(nomeUsuario);
 			UserDetails usuarioSpring = userServiceImpl.loadUserByUsername(nomeUsuario);
+			System.out.println(usuarioSpring.getUsername());
 			return new UsernamePasswordAuthenticationToken(usuarioSpring, usuarioSpring.getPassword(), usuarioSpring.getAuthorities());
 		}
 		return null;
