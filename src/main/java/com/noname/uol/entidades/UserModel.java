@@ -8,10 +8,10 @@ import com.noname.uol.entidades.UserModel;
 import lombok.Data;
 
 @Data
+@Document("userModel")
 public class UserModel implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String id;
-	private String email;
-	private String password;
+	private Credencial credencial;
 	private List<Role> autenticacao;	
 }

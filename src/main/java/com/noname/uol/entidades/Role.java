@@ -2,8 +2,6 @@ package com.noname.uol.entidades;
 
 import java.io.Serializable;
 
-import org.springframework.security.core.GrantedAuthority;
-
 import com.noname.uol.enums.Roles;
 
 import lombok.Data;
