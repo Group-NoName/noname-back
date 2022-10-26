@@ -1,13 +1,14 @@
 package com.noname.uol.controles;
 
 import java.net.URI;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,9 +28,12 @@ import com.noname.uol.servicos.CategoriasServico;
 import com.noname.uol.servicos.ProdutoServico;
 import com.noname.uol.servicos.excecao.TratamentoErro;
 
+import io.swagger.annotations.Api;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/categoria")
+@Api(value="categoria")
 public class CategoriaControle {
 	
 	
@@ -39,6 +43,7 @@ public class CategoriaControle {
 	private CategoriaRepositorio repo;
 	@Autowired
 	private ProdutoServico serviceProduto;
+	
 	
 	@GetMapping("/categorias")
 	public ResponseEntity<List<Categorias>> obterTodasCategorias(){
@@ -58,6 +63,7 @@ public class CategoriaControle {
 		return ResponseEntity.ok().body(categoria.getProdutos());
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirNovaCategoria(@RequestBody Categorias categoria){
 
@@ -75,6 +81,7 @@ public class CategoriaControle {
 		
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("/categorias-produtos/{id}")
 	public ResponseEntity<?> inserirProduto(
 			@RequestBody Categorias objDto,
@@ -86,21 +93,6 @@ public class CategoriaControle {
 				return new ResponseEntity<>("Produto já está em outra categoria", HttpStatus.NOT_ACCEPTABLE);
 			}
 		}
-<<<<<<< Updated upstream
-		boolean hasCopy = false;
-		String errorLog = "";
-		
-		for (Produtos produto : objDto.getProdutos()) {
-		
-			if(categoria.getProdutos().contains(produto)) {
-				hasCopy = true;
-				errorLog += serviceProduto.findById(produto.getId()).getNome();
-			}
-		}
-		
-		if(hasCopy) {
-			return new ResponseEntity<>(errorLog, HttpStatus.NOT_ACCEPTABLE);
-=======
 		
 		TratamentoErro<Produtos> tratamentoErros = new TratamentoErro<Produtos>();
 		
@@ -108,7 +100,6 @@ public class CategoriaControle {
 
 		if(tratamentoErros.getHasError()) {
 			return new ResponseEntity<>(tratamentoErros.getErrorLog(), HttpStatus.NOT_ACCEPTABLE);
->>>>>>> Stashed changes
 		}
 		else {
 			categoria.getProdutos().addAll(objDto.getProdutos());
@@ -117,6 +108,7 @@ public class CategoriaControle {
 		}
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("/atualizar/{id}")
 	public ResponseEntity<?> update(
 			@PathVariable String id,
@@ -127,6 +119,7 @@ public class CategoriaControle {
 		return new ResponseEntity<>("Categoria atualizada com sucesso", HttpStatus.ACCEPTED);
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@DeleteMapping("/categorias-produtos/{categoriaId}/{produtoId}")
 	public ResponseEntity<?> deletarRelacaoCategoriaProduto(
 			@PathVariable String categoriaId,
@@ -138,6 +131,7 @@ public class CategoriaControle {
 		return new ResponseEntity<>("Produtos removidos da categoria com sucesso", HttpStatus.ACCEPTED);
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@DeleteMapping("/excluir/{id}")
 	public ResponseEntity<?> deletarCategoria(@PathVariable String id){
 		service.delete(id);

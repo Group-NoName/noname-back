@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +25,12 @@ import com.noname.uol.entidades.Produtos;
 import com.noname.uol.servicos.OfertasServico;
 import com.noname.uol.servicos.ProdutoServico;
 
+import io.swagger.annotations.Api;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/oferta")
+@Api(value="oferta")
 public class OfertaControle {
 	
 	@Autowired
@@ -46,7 +50,7 @@ public class OfertaControle {
 		Ofertas oferta = ofertaServico.findById(id);
 		return new ResponseEntity<>(oferta, HttpStatus.ACCEPTED);
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirOferta(@RequestBody Ofertas oferta){
 		
@@ -74,7 +78,7 @@ public class OfertaControle {
 			return new ResponseEntity<>("Oferta cadastrada com sucesso", HttpStatus.CREATED);
 		}	
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PostMapping("inserir-produtos-oferta")
 	public ResponseEntity<?> atualizarTodosDescontosProdutosOferta(@RequestBody Ofertas objDto){
 		Ofertas oferta = objDto;
@@ -95,7 +99,7 @@ public class OfertaControle {
 	}
 	
 	
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("adicionar-produto/{id}")
 	public ResponseEntity<?> adicionarOfertaProduto(@PathVariable String id, @RequestBody Ofertas objDto){
 		Ofertas oferta = ofertaServico.findById(id);
@@ -133,7 +137,7 @@ public class OfertaControle {
 		}
 		return new ResponseEntity<>("Produtos adicionados com sucesso", HttpStatus.ACCEPTED);
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("remover-produto/{id}")
 	public ResponseEntity<?> removerOfertaProduto(@PathVariable String id,@RequestBody Ofertas objDto){
 	
@@ -155,7 +159,7 @@ public class OfertaControle {
 
 		return new ResponseEntity<>("Produtos removidos com sucesso", HttpStatus.ACCEPTED);
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("retirar-todos-produtos/{id}")
 	public ResponseEntity<?> retirarTodosProdutosDaOferta(@PathVariable String id){
 		
@@ -179,6 +183,7 @@ public class OfertaControle {
 	
 	
 	//#TODO Deletar oferta
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@DeleteMapping("excluir/{id}")
 	public ResponseEntity<?> deletarOferta(@PathVariable String id){
 

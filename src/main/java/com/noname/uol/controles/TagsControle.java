@@ -8,6 +8,7 @@ import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,9 +27,12 @@ import com.noname.uol.servicos.ProdutoServico;
 import com.noname.uol.servicos.TagsServico;
 import com.noname.uol.servicos.excecao.TratamentoErro;
 
+import io.swagger.annotations.Api;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/tag")
+@Api(value="tag")
 public class TagsControle {
 
 	@Autowired
@@ -48,7 +52,7 @@ public class TagsControle {
 		Tags tag = tagServico.findById(id);
 		return new ResponseEntity<>(tag, HttpStatus.ACCEPTED);
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirNovaTag(@RequestBody Tags tag){
 		
@@ -65,7 +69,7 @@ public class TagsControle {
 
 		return new ResponseEntity<>("Tag cadastrada com sucesso", HttpStatus.ACCEPTED);
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("/atualizar/{id}")
 	public ResponseEntity<?> atualizarTag(@PathVariable String id, @RequestBody Tags tag){
 		
@@ -82,13 +86,13 @@ public class TagsControle {
 		tag = tagServico.update(tag);
 		return new ResponseEntity<>("Tag atualizada com sucesso", HttpStatus.ACCEPTED);
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@DeleteMapping("/excluir/{id}")
 	public ResponseEntity<?> deletarTag(@PathVariable String id){
 		tagServico.delete(id);
 		return new ResponseEntity<>("Tag excluida com sucesso", HttpStatus.ACCEPTED);
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@DeleteMapping("/tag-produtos/{tagId}/{produtoId}")
 	public ResponseEntity<?> deleteRelacao(
 											@PathVariable String tagId,
@@ -102,12 +106,5 @@ public class TagsControle {
 		tagServico.insert(tag);
 		return new ResponseEntity<>("Tag excluida do produto com sucesso", HttpStatus.ACCEPTED);
 	}
-	@PutMapping("/atualizar/{tagId}")
-	public ResponseEntity<Void> atualizar(@PathVariable String tagId, @RequestBody Tags body){
-		Tags tag = tagServico.body(body);
-		tag.setId(tagId);
-		tag = tagServico.update(tag);
-		return ResponseEntity.noContent().build();	
-		}
-	
+
 }
