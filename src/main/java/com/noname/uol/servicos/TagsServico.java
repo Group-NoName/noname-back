@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.noname.uol.entidades.Produtos;
 import com.noname.uol.entidades.Tags;
 import com.noname.uol.repositorios.TagsRepositorio;
 import com.noname.uol.servicos.excecao.ObjectNotFoundException;

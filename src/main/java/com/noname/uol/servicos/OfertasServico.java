@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.noname.uol.entidades.Ofertas;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.repositorios.OfertasRepositorio;
-import com.noname.uol.repositorios.produtosRepositorio;
 import com.noname.uol.servicos.excecao.ObjectNotFoundException;
 
 @Service

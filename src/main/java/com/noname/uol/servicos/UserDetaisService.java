@@ -1,7 +1,5 @@
 package com.noname.uol.servicos;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.noname.uol.config.jwt.UserDetailsImpl;
 import com.noname.uol.config.jwt.UsuarioSelecionadorEmailUsuario;
+import com.noname.uol.entidades.Credencial;
 import com.noname.uol.entidades.UserModel;
 import com.noname.uol.repositorios.UserRepositorio;
 
@@ -30,8 +29,7 @@ public class UserDetaisService implements UserDetailsService{
 		if (usuario == null) {
 			throw new UsernameNotFoundException(email);
 		}
-		UserModel credencial = (UserModel) Arrays.asList(usuario.getEmail(), usuario.getPassword());
-		UserModel credenciais = credencial;
-		return new UserDetailsImpl(credenciais.getEmail(), credenciais.getPassword(), usuario.getAutenticacao());
+		Credencial credencial = usuario.getCredencial();
+		return new UserDetailsImpl(credencial.getEmail(), credencial.getPassword(), usuario.getAutenticacao());
 	}
 }
