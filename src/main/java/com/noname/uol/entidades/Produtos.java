@@ -14,7 +14,7 @@ import lombok.Data;
 
 @Data
 @Document
-public class Produtos implements Serializable {
+public class Produtos implements Serializable, InformacaoErro {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -65,6 +65,11 @@ public class Produtos implements Serializable {
 	
 	public void AddToTagList(Tags tag) {
 		tags.add(tag);
+	}
+
+	@Override
+	public String obterNome() {
+		return this.getNome();
 	}
 	
 }

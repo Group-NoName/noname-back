@@ -21,6 +21,7 @@ import com.noname.uol.entidades.Pacotes;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.servicos.PacoteServico;
 import com.noname.uol.servicos.ProdutoServico;
+import com.noname.uol.servicos.excecao.TratamentoErro;
 @CrossOrigin
 @RestController
 @RequestMapping("/pacote")
@@ -82,25 +83,22 @@ public class PacoteControles {
 		
 		List<String> listaIds = new ArrayList<>();
 		
-		boolean hasCopy = false;
-		String errorLog = "";
-		for (Produtos produto : objDto.getProdutos()) {
-			if(pacote.getProdutos().contains(produto)) {
-				hasCopy = true;
-				errorLog += produtoServico.findById(produto.getId()).getNome();
-			}
-			listaIds.add(produto.getId());
+		TratamentoErro<Produtos> tratamentoErros = new TratamentoErro<Produtos>();
 		
+		tratamentoErros.verificarCopiaEntreListas(objDto.getProdutos(), pacote.getProdutos());
+
+		if(tratamentoErros.getHasError()) {
+			return new ResponseEntity<>(tratamentoErros.getErrorLog(), HttpStatus.NOT_ACCEPTABLE);
 		}
-		if(hasCopy)
-			return new ResponseEntity<>(errorLog, HttpStatus.NOT_ACCEPTABLE);
-		List<Produtos> produtos = produtoServico.fromListIds(listaIds);
+		else {
+			List<Produtos> produtos = produtoServico.fromListIds(listaIds);
+			
+			pacote.getProdutos().addAll(produtos);
 		
-		pacote.getProdutos().addAll(produtos);
-	
-		pacoteServico.save(pacote);
-		
-		return new ResponseEntity<>("Produtos inseridos com sucesso no pacote", HttpStatus.ACCEPTED);
+			pacoteServico.save(pacote);
+			
+			return new ResponseEntity<>("Produtos inseridos com sucesso no pacote", HttpStatus.ACCEPTED);
+		}
 	}
 	
 	@PutMapping("remover-produto/{id}")

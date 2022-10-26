@@ -1,6 +1,9 @@
 package com.noname.uol.controles;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,17 +14,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-
+import java.util.HashMap;
+import java.util.Map;
 import com.noname.uol.dto.produtoDTO;
 import com.noname.uol.entidades.TagProduto;
 import com.noname.uol.entidades.Tags;
+import com.noname.uol.repositorios.produtosRepositorio;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.servicos.ProdutoServico;
 import com.noname.uol.servicos.TagsServico;
-
+import com.noname.uol.servicos.excecao.TratamentoErro;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -38,6 +44,33 @@ public class ProdutoControles {
 	private ProdutoServico produtoServico;
 	@Autowired	
 	private TagsServico tagsServico;
+	
+	@Autowired
+	private produtosRepositorio repositorio;
+	
+	@Autowired
+	private TratamentoErro tratamentoErro;
+	
+	@GetMapping("/produtosPage")
+	public ResponseEntity<?> obterPageProdutos(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size){
+		
+		List<Produtos> lista = new ArrayList<Produtos>();
+		
+		Pageable paging = PageRequest.of(page, size);
+		
+		Page<Produtos> pageProd = repositorio.findAll(paging);
+		
+		lista = pageProd.getContent();
+		
+		Map<String, Object> response = new HashMap<>();
+		response.put("Produtos", lista);
+		response.put("Pagina atual", pageProd.getNumber());
+		response.put("Total de itens", pageProd.getTotalElements());
+		response.put("Total de paginas", pageProd.getTotalPages());
+		
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
 	
 	@GetMapping("/produtos")
 	public ResponseEntity<List<produtoDTO>> obterProdutos() {
@@ -58,30 +91,14 @@ public class ProdutoControles {
 	@GetMapping("/produtos-semelhantes/{id}/{quantia}")
 	public ResponseEntity<List<produtoDTO>> obterProdutosSemelhantes(@PathVariable String id, @PathVariable String quantia){
 
-		List<Tags> tagsProdutoAlvo = produtoServico.findById(id).getTags();
 		List<Produtos> todosOsProdutos = produtoServico.findAll();
-		List<TagProduto> todasTagProdutos = new ArrayList<>();
 		
-		for(Produtos produto : todosOsProdutos){
-			if (produto == produtoServico.findById(id))
-				continue;
-			TagProduto atualTagProduto = new TagProduto(produto, 0);
-			
-			for (Tags tag : produto.getTags()) {
-				if(tagsProdutoAlvo.contains(tag)) {
-					atualTagProduto.UpScore();
-				}
-			}
-			todasTagProdutos.add(atualTagProduto);
-		}
-
-
+		List<TagProduto> todasTagProdutos = tagsServico.filtrarTagProdutoSemelhante(todosOsProdutos, id);
+		
 		Collections.sort(todasTagProdutos, TagProduto.Comparators.SCORE);
 		
 		List<Produtos> produtosSortidos = produtoServico.fromTagProduto(todasTagProdutos);
-		
-		
-		
+
 		List<produtoDTO> produtoDto = produtosSortidos
 				.stream()
 				.map(x -> new produtoDTO(x))
@@ -129,17 +146,13 @@ public class ProdutoControles {
 			@PathVariable String id){
 		
 		Produtos produto = produtoServico.findById(id);
-		boolean hasCopy = false;
-		String errorLog = "";
 		
-		for (Tags tag : objDto.getTags()) 
-			if(produto.getTags().contains(tag)) {
-				hasCopy = true;
-				errorLog += tagsServico.findById(tag.getId()).getNome();
-			}
+		TratamentoErro<Tags> tratamentoErros = new TratamentoErro<Tags>();
 		
-		if(hasCopy) {
-			return new ResponseEntity<>(errorLog, HttpStatus.NOT_ACCEPTABLE);
+		tratamentoErros.verificarCopiaEntreListas(objDto.getTags(), produto.getTags());
+
+		if(tratamentoErros.getHasError()) {
+			return new ResponseEntity<>(tratamentoErros.getErrorLog(), HttpStatus.NOT_ACCEPTABLE);
 		}else {
 			produto.getTags().addAll(objDto.getTags());
 			produtoServico.insert(produto);
@@ -155,7 +168,7 @@ public class ProdutoControles {
 		Collections.reverse(produto);
 		List<produtoDTO> produtoDto = produto
 									.stream()
-									.map(x -> new produtoDTO(x))
+							.map(x -> new produtoDTO(x))
 									.limit(Integer.parseInt(quantia))
 									.collect(Collectors.toList());
 		return new ResponseEntity<>(produtoDto, HttpStatus.FOUND);

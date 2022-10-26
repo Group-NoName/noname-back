@@ -116,6 +116,7 @@ public class OfertaControle {
 				return new ResponseEntity<>(produtoServico.findById(produto.getId()), HttpStatus.CONFLICT);
 				
 			
+			
 			listaIds.add(produto.getId());
 		}
 		

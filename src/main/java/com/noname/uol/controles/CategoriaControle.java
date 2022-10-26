@@ -21,9 +21,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.noname.uol.entidades.Categorias;
 import com.noname.uol.entidades.Produtos;
+import com.noname.uol.entidades.Tags;
 import com.noname.uol.repositorios.CategoriaRepositorio;
 import com.noname.uol.servicos.CategoriasServico;
 import com.noname.uol.servicos.ProdutoServico;
+import com.noname.uol.servicos.excecao.TratamentoErro;
 
 @CrossOrigin
 @RestController
@@ -84,6 +86,7 @@ public class CategoriaControle {
 				return new ResponseEntity<>("Produto já está em outra categoria", HttpStatus.NOT_ACCEPTABLE);
 			}
 		}
+<<<<<<< Updated upstream
 		boolean hasCopy = false;
 		String errorLog = "";
 		
@@ -97,6 +100,15 @@ public class CategoriaControle {
 		
 		if(hasCopy) {
 			return new ResponseEntity<>(errorLog, HttpStatus.NOT_ACCEPTABLE);
+=======
+		
+		TratamentoErro<Produtos> tratamentoErros = new TratamentoErro<Produtos>();
+		
+		tratamentoErros.verificarCopiaEntreListas(objDto.getProdutos(), categoria.getProdutos());
+
+		if(tratamentoErros.getHasError()) {
+			return new ResponseEntity<>(tratamentoErros.getErrorLog(), HttpStatus.NOT_ACCEPTABLE);
+>>>>>>> Stashed changes
 		}
 		else {
 			categoria.getProdutos().addAll(objDto.getProdutos());

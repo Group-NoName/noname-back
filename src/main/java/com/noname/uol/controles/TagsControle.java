@@ -24,6 +24,7 @@ import com.noname.uol.entidades.Produtos;
 import com.noname.uol.entidades.Tags;
 import com.noname.uol.servicos.ProdutoServico;
 import com.noname.uol.servicos.TagsServico;
+import com.noname.uol.servicos.excecao.TratamentoErro;
 
 @CrossOrigin
 @RestController
@@ -51,17 +52,17 @@ public class TagsControle {
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirNovaTag(@RequestBody Tags tag){
 		
-		for (Tags tagObj: tagServico.findAll()) {
-			if(tagObj.getNome().equals(tag.getNome()))
-				return new ResponseEntity<>("Nome de tag não pode ser repetido", HttpStatus.CONFLICT);
-		}
-		
-		Tags obj = tagServico.insert(tag);
-		URI uri = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(obj.getId())
-				.toUri();
+//		for (Tags tagObj: tagServico.findAll()) {
+//			if(tagObj.getNome().equals(tag.getNome()))
+//		}
+		List<Tags> targetList = new ArrayList<>();
+		targetList.add(tag);
+		TratamentoErro<Tags> te = new TratamentoErro<Tags>();
+		te.verificarCopiaItemUnico(tagServico.findAll(), tag);
+		if(te.getHasError()) 
+			return new ResponseEntity<>("Nome de tag não pode ser repetido", HttpStatus.CONFLICT);
+		tagServico.insert(tag);
+
 		return new ResponseEntity<>("Tag cadastrada com sucesso", HttpStatus.ACCEPTED);
 	}
 	

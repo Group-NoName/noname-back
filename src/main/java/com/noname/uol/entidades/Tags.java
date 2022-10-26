@@ -18,7 +18,7 @@ import lombok.Data;
 
 @Data
 @Document
-public class Tags {
+public class Tags implements InformacaoErro {
 	
 	@Id
 	private String id;
@@ -53,6 +53,10 @@ public class Tags {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
+	}
+	@Override
+	public String obterNome() {
+		return this.getNome();
 	}
 	
 }
