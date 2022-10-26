@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,6 +60,7 @@ public class CategoriaControle {
 		return ResponseEntity.ok().body(categoria.getProdutos());
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirNovaCategoria(@RequestBody Categorias categoria){
 
@@ -76,6 +78,7 @@ public class CategoriaControle {
 		
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("/categorias-produtos/{id}")
 	public ResponseEntity<?> inserirProduto(
 			@RequestBody Categorias objDto,
@@ -106,6 +109,7 @@ public class CategoriaControle {
 		}
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("/atualizar/{id}")
 	public ResponseEntity<?> update(
 			@PathVariable String id,
@@ -116,6 +120,7 @@ public class CategoriaControle {
 		return new ResponseEntity<>("Categoria atualizada com sucesso", HttpStatus.ACCEPTED);
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@DeleteMapping("/categorias-produtos/{categoriaId}/{produtoId}")
 	public ResponseEntity<?> deletarRelacaoCategoriaProduto(
 			@PathVariable String categoriaId,
@@ -127,6 +132,7 @@ public class CategoriaControle {
 		return new ResponseEntity<>("Produtos removidos da categoria com sucesso", HttpStatus.ACCEPTED);
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@DeleteMapping("/excluir/{id}")
 	public ResponseEntity<?> deletarCategoria(@PathVariable String id){
 		service.delete(id);

@@ -3,6 +3,7 @@ package com.noname.uol.controles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -93,6 +94,7 @@ public class ProdutoControles {
 		return new ResponseEntity<>(produtoDto, HttpStatus.ACCEPTED);
 	}
 	 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirProduto(@RequestBody produtoDTO objDto){
 		Produtos produto = produtoServico.fromDTO(objDto);
@@ -107,13 +109,13 @@ public class ProdutoControles {
 		produto = produtoServico.insert(produto);
 		return new ResponseEntity<>("Produto cadastrado com sucesso!", HttpStatus.CREATED);
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@DeleteMapping("/excluir/{id}")
 	public ResponseEntity<?> deletarProduto(@PathVariable String id) {
 		produtoServico.delete(id);
 		return new ResponseEntity<>("Produto deletado com sucesso!", HttpStatus.ACCEPTED);
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("/atualizar/{id}")
 	public ResponseEntity<?> atualizarProduto(
 			@RequestBody produtoDTO objDto, 
@@ -124,7 +126,7 @@ public class ProdutoControles {
 		obj = produtoServico.update(obj);
 		return new ResponseEntity<>("Produto atualizado com sucesso!", HttpStatus.ACCEPTED);
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("/adicionar-tag/{id}")
 	public ResponseEntity<?> adicionarTag(
 			@RequestBody Produtos objDto, 
@@ -149,7 +151,7 @@ public class ProdutoControles {
 		return new ResponseEntity<>("Tag adicionada com sucesso", HttpStatus.ACCEPTED);
 
 	}
-	 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@GetMapping("/produtos-quantia/{quantia}")
 	public ResponseEntity<List<produtoDTO>> obterQuantiaDeProdutos(@PathVariable String quantia){
 		  

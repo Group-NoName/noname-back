@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,6 +50,7 @@ public class PacoteControles {
 		return new ResponseEntity<>(pacote, HttpStatus.ACCEPTED);
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirPacote(@RequestBody Pacotes pacote){
 		for (Pacotes pacoteObj : pacoteServico.findAll()) {
@@ -58,13 +60,13 @@ public class PacoteControles {
 		pacoteServico.save(pacote);
 		return new ResponseEntity<>("Pacote criado com sucesso", HttpStatus.CREATED); 
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@DeleteMapping("/excluir/{id}")
 	public ResponseEntity<?> deletarPacote(@PathVariable String id){
 		pacoteServico.delete(id);
 		return new ResponseEntity<>("Pacote apagado com sucesso", HttpStatus.ACCEPTED);
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("atualizar/{id}")
 	public ResponseEntity<?> atualizarPacote(
 			@RequestBody Pacotes objDto,
@@ -75,7 +77,7 @@ public class PacoteControles {
 		obj = pacoteServico.update(obj);
 		return new ResponseEntity<>("Pacote atualizado com sucesso", HttpStatus.ACCEPTED);
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("inserir-produto/{id}")
 	public ResponseEntity<?> inserirProdutosNoPacote(
 			@PathVariable String id,
@@ -105,7 +107,7 @@ public class PacoteControles {
 		
 		return new ResponseEntity<>("Produtos inseridos com sucesso no pacote", HttpStatus.ACCEPTED);
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("remover-produto/{id}")
 	public ResponseEntity<?> removerProdutosNoPacote(
 			@PathVariable String id,
