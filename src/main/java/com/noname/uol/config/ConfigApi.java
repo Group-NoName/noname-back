@@ -36,6 +36,7 @@ public class ConfigApi extends WebSecurityConfigurerAdapter{
 	
 	private static final String[] rotasPublicas = { 
 			"/produto/produtos",
+			"/produtos-semelhantes/**",
 			"/pacote/pacotes",
 			"/pacote/pacotes",
 			"/tag/tags",
