@@ -46,6 +46,7 @@ public class ProdutoControles {
 	
 	@Autowired
 	private ProdutoServico produtoServico;
+	
 	@Autowired	
 	private TagsServico tagsServico;
 	
@@ -91,28 +92,7 @@ public class ProdutoControles {
 		Produtos produto = produtoServico.findById(id);
 		return new ResponseEntity<>(new produtoDTO(produto), HttpStatus.ACCEPTED);
 	}
-	
-	@GetMapping("/produtos-semelhantes/{id}/{quantia}")
-	public ResponseEntity<List<produtoDTO>> obterProdutosSemelhantes(@PathVariable String id, @PathVariable String quantia){
-
-		List<Produtos> todosOsProdutos = produtoServico.findAll();
-		
-		List<TagProduto> todasTagProdutos = tagsServico.filtrarTagProdutoSemelhante(todosOsProdutos, id);
-		
-		Collections.sort(todasTagProdutos, TagProduto.Comparators.SCORE);
-		
-		List<Produtos> produtosSortidos = produtoServico.fromTagProduto(todasTagProdutos);
-
-		List<produtoDTO> produtoDto = produtosSortidos
-				.stream()
-				.map(x -> new produtoDTO(x))
-				.limit(Integer.parseInt(quantia))
-				.collect(Collectors.toList());		
-		
-		return new ResponseEntity<>(produtoDto, HttpStatus.ACCEPTED);
-	}
 	 
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirProduto(@RequestBody produtoDTO objDto){
 		Produtos produto = produtoServico.fromDTO(objDto);
@@ -127,13 +107,13 @@ public class ProdutoControles {
 		produto = produtoServico.insert(produto);
 		return new ResponseEntity<>("Produto cadastrado com sucesso!", HttpStatus.CREATED);
 	}
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+	
 	@DeleteMapping("/excluir/{id}")
 	public ResponseEntity<?> deletarProduto(@PathVariable String id) {
 		produtoServico.delete(id);
 		return new ResponseEntity<>("Produto deletado com sucesso!", HttpStatus.ACCEPTED);
 	}
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+	
 	@PutMapping("/atualizar/{id}")
 	public ResponseEntity<?> atualizarProduto(
 			@RequestBody produtoDTO objDto, 
@@ -144,7 +124,21 @@ public class ProdutoControles {
 		obj = produtoServico.update(obj);
 		return new ResponseEntity<>("Produto atualizado com sucesso!", HttpStatus.ACCEPTED);
 	}
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+	
+	@GetMapping("/produtos-quantia/{quantia}")
+	public ResponseEntity<List<produtoDTO>> obterQuantiaDeProdutos(@PathVariable String quantia){
+		  
+		List<Produtos> produto = produtoServico.findAll();
+		Collections.reverse(produto);
+		List<produtoDTO> produtoDto = produto
+									.stream()
+							.map(x -> new produtoDTO(x))
+									.limit(Integer.parseInt(quantia))
+									.collect(Collectors.toList());
+		return new ResponseEntity<>(produtoDto, HttpStatus.ACCEPTED);
+	}
+	
+	/*
 	@PutMapping("/adicionar-tag/{id}")
 	public ResponseEntity<?> adicionarTag(
 			@RequestBody Produtos objDto, 
@@ -164,19 +158,26 @@ public class ProdutoControles {
 		}
 		return new ResponseEntity<>("Tag adicionada com sucesso", HttpStatus.ACCEPTED);
 
-	}
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-	@GetMapping("/produtos-quantia/{quantia}")
-	public ResponseEntity<List<produtoDTO>> obterQuantiaDeProdutos(@PathVariable String quantia){
-		  
-		List<Produtos> produto = produtoServico.findAll();
-		Collections.reverse(produto);
-		List<produtoDTO> produtoDto = produto
-									.stream()
-							.map(x -> new produtoDTO(x))
-									.limit(Integer.parseInt(quantia))
-									.collect(Collectors.toList());
-		return new ResponseEntity<>(produtoDto, HttpStatus.ACCEPTED);
-	}
+	}*/
 	
+	/*
+	@GetMapping("/produtos-semelhantes/{id}/{quantia}")
+	public ResponseEntity<List<produtoDTO>> obterProdutosSemelhantes(@PathVariable String id, @PathVariable String quantia){
+
+		List<Produtos> todosOsProdutos = produtoServico.findAll();
+		
+		List<TagProduto> todasTagProdutos = tagsServico.filtrarTagProdutoSemelhante(todosOsProdutos, id);
+		
+		Collections.sort(todasTagProdutos, TagProduto.Comparators.SCORE);
+		
+		List<Produtos> produtosSortidos = produtoServico.fromTagProduto(todasTagProdutos);
+
+		List<produtoDTO> produtoDto = produtosSortidos
+				.stream()
+				.map(x -> new produtoDTO(x))
+				.limit(Integer.parseInt(quantia))
+				.collect(Collectors.toList());		
+		
+		return new ResponseEntity<>(produtoDto, HttpStatus.ACCEPTED);
+	}*/
 }

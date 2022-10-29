@@ -50,6 +50,7 @@ public class OfertaControle {
 		Ofertas oferta = ofertaServico.findById(id);
 		return new ResponseEntity<>(oferta, HttpStatus.ACCEPTED);
 	}
+	/*
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirOferta(@RequestBody Ofertas oferta){
@@ -77,7 +78,8 @@ public class OfertaControle {
 		
 			return new ResponseEntity<>("Oferta cadastrada com sucesso", HttpStatus.CREATED);
 		}	
-	}
+	} */
+	/*
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PostMapping("inserir-produtos-oferta")
 	public ResponseEntity<?> atualizarTodosDescontosProdutosOferta(@RequestBody Ofertas objDto){
@@ -96,9 +98,9 @@ public class OfertaControle {
 		ofertaServico.save(oferta);
 		
 		return new ResponseEntity<>("Descontos dos produtos atualizados com sucesso", HttpStatus.ACCEPTED);
-	}
+	}*/
 	
-	
+	/*
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("adicionar-produto/{id}")
 	public ResponseEntity<?> adicionarOfertaProduto(@PathVariable String id, @RequestBody Ofertas objDto){
@@ -137,6 +139,7 @@ public class OfertaControle {
 		}
 		return new ResponseEntity<>("Produtos adicionados com sucesso", HttpStatus.ACCEPTED);
 	}
+	*//*
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("remover-produto/{id}")
 	public ResponseEntity<?> removerOfertaProduto(@PathVariable String id,@RequestBody Ofertas objDto){
@@ -158,7 +161,7 @@ public class OfertaControle {
 		ofertaServico.save(oferta);
 
 		return new ResponseEntity<>("Produtos removidos com sucesso", HttpStatus.ACCEPTED);
-	}
+	}*//*
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("retirar-todos-produtos/{id}")
 	public ResponseEntity<?> retirarTodosProdutosDaOferta(@PathVariable String id){
@@ -201,5 +204,5 @@ public class OfertaControle {
 		ofertaServico.delete(id);
 		
 		return new ResponseEntity<>("Oferta excluida com sucesso", HttpStatus.ACCEPTED);
-	}
+	}*/
 }

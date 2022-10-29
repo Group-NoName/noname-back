@@ -64,6 +64,7 @@ public class TagsServico {
 		return String.join(" ", StringTags);
 	}
 	
+	/*
 	public List<TagProduto> filtrarTagProdutoSemelhante(List<Produtos> todosOsProdutos, String idProdutoAlvo) {
 		
 		List<TagProduto> todasTagProdutos = new ArrayList<>();
@@ -84,6 +85,6 @@ public class TagsServico {
 		
 		return todasTagProdutos;
 		
-	}
+	}*/
 
 }

@@ -35,26 +35,7 @@ public class ConfigApi extends WebSecurityConfigurerAdapter{
 	private UserDetaisService userDetaisService;
 	
 	private static final String[] rotasPublicas = { 
-			"/produto/produtos",
-			"/produtos-semelhantes/**",
-			"/pacote/pacotes",
-			"/pacote/pacotes",
-			"/tag/tags",
-			"/oferta/ofertas",
-			"/categoria/categorias",
-			"/produto/produtos/**",
-			"/pacote/pacote/**",
-			"/tag/tags/**",
-			"/oferta/ofertas/**",
-			"/categoria/categorias/**",
-			"/swagger-ui/**",
-			"/v2/api-docs/**",
-			"/swagger-resources/**",
-			"/swagger-ui.html",
-			"/webjars/**",
-			"/swagger.json",
-			"/user/cadastro",
-			"/user/login"
+			"/**"
 	};
 	
 	@Override

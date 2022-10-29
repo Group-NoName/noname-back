@@ -92,6 +92,7 @@ public class TagsControle {
 		tagServico.delete(id);
 		return new ResponseEntity<>("Tag excluida com sucesso", HttpStatus.ACCEPTED);
 	}
+	/*
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@DeleteMapping("/tag-produtos/{tagId}/{produtoId}")
 	public ResponseEntity<?> deleteRelacao(
@@ -105,6 +106,6 @@ public class TagsControle {
 		tag.getProdutos().remove(produto);
 		tagServico.insert(tag);
 		return new ResponseEntity<>("Tag excluida do produto com sucesso", HttpStatus.ACCEPTED);
-	}
+	}*/
 
 }

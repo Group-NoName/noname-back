@@ -39,7 +39,7 @@ public class OfertasServico {
 		repositorio.deleteById(id);
 	}
 	
-	public List<Produtos> atualizarPrecosDescontos(double desconto, List<String> produtosParaAtualizar){
+	/*public List<Produtos> atualizarPrecosDescontos(double desconto, List<String> produtosParaAtualizar){
 		List<Produtos> produtos = new ArrayList<>();
 		for(String idProduto : produtosParaAtualizar) {
 			
@@ -50,9 +50,9 @@ public class OfertasServico {
 			produtoServico.insert(produto);
 		}
 		return produtos;
-	}
+	} */
 	
-	public List<Produtos> atualizarApenasDescontos(double desconto, List<String> produtosParaAtualizar){
+	/* public List<Produtos> atualizarApenasDescontos(double desconto, List<String> produtosParaAtualizar){
 		List<Produtos> produtos = new ArrayList<>();
 		for(String idProduto : produtosParaAtualizar) {
 			
@@ -63,7 +63,7 @@ public class OfertasServico {
 			produtoServico.insert(produto);
 		}
 		return produtos;
-	}
+	} */
 	
 	
 }

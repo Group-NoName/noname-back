@@ -21,29 +21,13 @@ public class Produtos implements Serializable, InformacaoErro {
 	private String id;
 	
 	private String nome;
-
-	private String descricao;
-
-	private Double preco;
-	
-	private List<Images> images;
-	
-	private Double desconto = 0.0;
-	
-	@DBRef(lazy = true)
-	private List<Tags> tags = new ArrayList<>();
-	
+		
 	public Produtos() {}
 	
-	public Produtos(String id, String nome, String descricao, List<Images> images, List<Tags> tags, Double preco, Double desconto) {
+	public Produtos(String id, String nome) {
 		super();
 		this.id = id;
 		this.nome = nome;
-		this.descricao = descricao;
-		this.preco = preco;
-		this.images = images;
-		this.tags = tags;
-		this.desconto = desconto;
 	}
 
 	@Override
@@ -62,10 +46,10 @@ public class Produtos implements Serializable, InformacaoErro {
 		Produtos other = (Produtos) obj;
 		return Objects.equals(id, other.id);
 	}
-	
+	/*
 	public void AddToTagList(Tags tag) {
 		tags.add(tag);
-	}
+	}*/
 
 	@Override
 	public String obterNome() {
