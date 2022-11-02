@@ -36,9 +36,6 @@ public class OfertaControle {
 	@Autowired
 	private OfertasServico ofertaServico;
 	
-	@Autowired
-	private ProdutoServico produtoServico;
-	
 	@GetMapping("/ofertas")
 	public ResponseEntity<List<Ofertas>> obterOfertas(){
 		List<Ofertas> oferta = ofertaServico.findAll();
@@ -50,159 +47,26 @@ public class OfertaControle {
 		Ofertas oferta = ofertaServico.findById(id);
 		return new ResponseEntity<>(oferta, HttpStatus.ACCEPTED);
 	}
-	/*
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+
 	@PostMapping("/cadastro")
-	public ResponseEntity<?> inserirOferta(@RequestBody Ofertas oferta){
+	public ResponseEntity<?> cadastrarOferta(@RequestBody Ofertas ofertaDto){
 		
-		//#TODO organização
+		ofertaServico.insert(ofertaDto);
+		return new ResponseEntity<>("Oferta cadastrada com sucesso", HttpStatus.ACCEPTED);
 		
-		Double desconto = 1 - (oferta.getDesconto()/100);
-		
-		List<String> listaIds = new ArrayList<>();
-		
-		boolean hasProduct = false;
-		String errorLog = "";
-		for (Produtos produto : oferta.getProdutos()) {
-			if(produtoServico.hasDescount(produto.getId())) {
-				hasProduct = true;
-				errorLog += produtoServico.findById(produto.getId()).getNome() + " ";
-			}
-			listaIds.add(produto.getId());
-		}
-		if(hasProduct == true) {
-			return new ResponseEntity<>(errorLog, HttpStatus.CONFLICT);
-		}else {
-			ofertaServico.atualizarPrecosDescontos(desconto, listaIds);
-			Ofertas obj = ofertaServico.insert(oferta);
-		
-			return new ResponseEntity<>("Oferta cadastrada com sucesso", HttpStatus.CREATED);
-		}	
-	} */
-	/*
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-	@PostMapping("inserir-produtos-oferta")
-	public ResponseEntity<?> atualizarTodosDescontosProdutosOferta(@RequestBody Ofertas objDto){
-		Ofertas oferta = objDto;
-		
-		Double desconto = 1 - (oferta.getDesconto()/100);
-
-		List<String> listaIds = new ArrayList<>();
-		
-		//#TODO Otimização
-		for (Produtos produto : objDto.getProdutos()) 
-			listaIds.add(produto.getId());
-		
-		List<Produtos> produtos = ofertaServico.atualizarPrecosDescontos(desconto, listaIds);
-		
-		ofertaServico.save(oferta);
-		
-		return new ResponseEntity<>("Descontos dos produtos atualizados com sucesso", HttpStatus.ACCEPTED);
-	}*/
-	
-	/*
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-	@PutMapping("adicionar-produto/{id}")
-	public ResponseEntity<?> adicionarOfertaProduto(@PathVariable String id, @RequestBody Ofertas objDto){
-		Ofertas oferta = ofertaServico.findById(id);
-
-		Double desconto = 1 - (oferta.getDesconto()/100);;
-		
-		List<String> listaIds = new ArrayList<>();
-		
-		boolean hasCopy = false;
-		List<Produtos> errorLog = new ArrayList<>();
-		
-		for (Produtos produto : objDto.getProdutos()) 
-		{
-			if(oferta.getProdutos().contains(produto)) {
-				hasCopy = true;
-				errorLog.add(produtoServico.findById(produto.getId()));
-			}else if(produtoServico.hasDescount(produto.getId())) 
-				return new ResponseEntity<>(produtoServico.findById(produto.getId()), HttpStatus.CONFLICT);
-				
-			
-			
-			listaIds.add(produto.getId());
-		}
-		
-		if(hasCopy) 
-		{
-			return new ResponseEntity<>(errorLog, HttpStatus.NOT_ACCEPTABLE);
-		}
-		else 
-		{
-			List<Produtos> produtos = ofertaServico.atualizarPrecosDescontos(desconto, listaIds);
-			oferta.getProdutos().addAll(produtos);
-			
-			ofertaServico.save(oferta);
-		}
-		return new ResponseEntity<>("Produtos adicionados com sucesso", HttpStatus.ACCEPTED);
-	}
-	*//*
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-	@PutMapping("remover-produto/{id}")
-	public ResponseEntity<?> removerOfertaProduto(@PathVariable String id,@RequestBody Ofertas objDto){
-	
-		Ofertas oferta = ofertaServico.findById(id);
-
-		Double desconto = 0.0;
-		
-		List<String> listaIds = new ArrayList<>();
-		
-		//#TODO Otimização
-		for (Produtos produto : objDto.getProdutos()) 
-			listaIds.add(produto.getId());
-		
-		List<Produtos> produtos = ofertaServico.atualizarPrecosDescontos(desconto, listaIds);
-		
-		oferta.getProdutos().removeAll(produtos);
-		
-		ofertaServico.save(oferta);
-
-		return new ResponseEntity<>("Produtos removidos com sucesso", HttpStatus.ACCEPTED);
-	}*//*
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-	@PutMapping("retirar-todos-produtos/{id}")
-	public ResponseEntity<?> retirarTodosProdutosDaOferta(@PathVariable String id){
-		
-		Ofertas oferta = ofertaServico.findById(id);
-		
-		List<String> listaIds = new ArrayList<>();
-		
-		//#TODO Otimização
-		for (Produtos produto : produtoServico.findAll()) 
-			listaIds.add(produto.getId());
-		
-		
-		List<Produtos> produtos = ofertaServico.atualizarApenasDescontos(0.0, listaIds);
-		
-		oferta.getProdutos().removeAll(produtos);
-		
-		ofertaServico.save(oferta);
-		
-		return new ResponseEntity<>("Produtos retirados com sucesso", HttpStatus.ACCEPTED);
 	}
 	
+	@PutMapping("/atualizar/{id}")
+	public ResponseEntity<?> atualizarOferta(@PathVariable String id, @RequestBody Ofertas ofertaDto){
+		ofertaDto.setId(id);
+		ofertaServico.update(ofertaDto);
+		return new ResponseEntity<>("Oferta atualizada com sucesso", HttpStatus.ACCEPTED);
+	}
 	
-	//#TODO Deletar oferta
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-	@DeleteMapping("excluir/{id}")
+	@DeleteMapping("/deletar/{id}")
 	public ResponseEntity<?> deletarOferta(@PathVariable String id){
-
-		Ofertas oferta = ofertaServico.findById(id);
-
-		List<String> listaIds = new ArrayList<>();
-		
-		//#TODO Otimização
-		for (Produtos produto : oferta.getProdutos()) 
-			if(produto != null)
-				listaIds.add(produto.getId());
-			
-		ofertaServico.atualizarPrecosDescontos(0, listaIds);
-
 		ofertaServico.delete(id);
-		
-		return new ResponseEntity<>("Oferta excluida com sucesso", HttpStatus.ACCEPTED);
-	}*/
+		return new ResponseEntity<>("Oferta excluída com sucesso", HttpStatus.ACCEPTED);
+	}	
+	
 }
