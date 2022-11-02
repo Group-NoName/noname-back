@@ -2,8 +2,8 @@ package com.noname.uol.repositorios;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.noname.uol.entidades.Categorias;
+import com.noname.uol.entidades.Servicos;
 
-public interface CategoriaRepositorio extends MongoRepository<Categorias, String>{
+public interface CategoriaRepositorio extends MongoRepository<Servicos, String>{
 
 }

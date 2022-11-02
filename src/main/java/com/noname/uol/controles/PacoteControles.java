@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.noname.uol.entidades.Categorias;
+import com.noname.uol.entidades.Servicos;
 import com.noname.uol.entidades.Pacotes;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.servicos.PacoteServico;
@@ -51,7 +51,7 @@ public class PacoteControles {
 		return new ResponseEntity<>(pacote, HttpStatus.ACCEPTED);
 	}
 	
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirPacote(@RequestBody Pacotes pacote){
 		for (Pacotes pacoteObj : pacoteServico.findAll()) {
@@ -61,13 +61,14 @@ public class PacoteControles {
 		pacoteServico.save(pacote);
 		return new ResponseEntity<>("Pacote criado com sucesso", HttpStatus.CREATED); 
 	}
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+
+	
 	@DeleteMapping("/excluir/{id}")
 	public ResponseEntity<?> deletarPacote(@PathVariable String id){
 		pacoteServico.delete(id);
 		return new ResponseEntity<>("Pacote apagado com sucesso", HttpStatus.ACCEPTED);
 	}
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+
 	@PutMapping("atualizar/{id}")
 	public ResponseEntity<?> atualizarPacote(
 			@RequestBody Pacotes objDto,
@@ -78,7 +79,7 @@ public class PacoteControles {
 		obj = pacoteServico.update(obj);
 		return new ResponseEntity<>("Pacote atualizado com sucesso", HttpStatus.ACCEPTED);
 	}
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+
 	@PutMapping("inserir-produto/{id}")
 	public ResponseEntity<?> inserirProdutosNoPacote(
 			@PathVariable String id,
@@ -88,6 +89,11 @@ public class PacoteControles {
 		
 		List<String> listaIds = new ArrayList<>();
 		
+		for(Produtos produto : objDto.getProdutos()) 
+			listaIds.add(produto.getId());
+		
+		List<Produtos> produtos = produtoServico.fromListIds(listaIds);
+
 		TratamentoErro<Produtos> tratamentoErros = new TratamentoErro<Produtos>();
 		
 		tratamentoErros.verificarCopiaEntreListas(objDto.getProdutos(), pacote.getProdutos());
@@ -95,9 +101,7 @@ public class PacoteControles {
 		if(tratamentoErros.getHasError()) {
 			return new ResponseEntity<>(tratamentoErros.getErrorLog(), HttpStatus.NOT_ACCEPTABLE);
 		}
-		else {
-			List<Produtos> produtos = produtoServico.fromListIds(listaIds);
-			
+		else {			
 			pacote.getProdutos().addAll(produtos);
 		
 			pacoteServico.save(pacote);
@@ -105,7 +109,7 @@ public class PacoteControles {
 			return new ResponseEntity<>("Produtos inseridos com sucesso no pacote", HttpStatus.ACCEPTED);
 		}
 	}
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+	
 	@PutMapping("remover-produto/{id}")
 	public ResponseEntity<?> removerProdutosNoPacote(
 			@PathVariable String id,

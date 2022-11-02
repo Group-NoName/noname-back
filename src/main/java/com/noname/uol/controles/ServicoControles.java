@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.noname.uol.entidades.Categorias;
+import com.noname.uol.entidades.Servicos;
 import com.noname.uol.entidades.Pacotes;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.entidades.Servicos;
 import com.noname.uol.servicos.ProdutoServico;
 import com.noname.uol.servicos.ServicosServicos;
+import com.noname.uol.servicos.excecao.TratamentoErro;
 
 import io.swagger.annotations.Api;
 
@@ -35,55 +36,101 @@ public class ServicoControles {
 	@Autowired
 	private ProdutoServico servicosProdutos;
 	
-	@PostMapping("/cadastro")
-	public ResponseEntity<?> insertServico(@RequestBody Servicos obj){
-		servicosService.insert(obj);
-		return new ResponseEntity<>("Serviço Cadastrado com sucesso", HttpStatus.OK);
-	}
-	@GetMapping("/servicos")
-	public ResponseEntity<?> getAllServicos(){
-		List<Servicos> servicos = servicosService.findAll();
-		return new ResponseEntity<>(servicos, HttpStatus.OK);
-	}
-	@PutMapping("/atualizar/{id}")
-	public ResponseEntity<?> putServicosName(@PathVariable String id, @RequestBody Servicos obj){
-		List<Produtos> produtos = new ArrayList<>();
-		produtos.addAll(servicosService.findById(id).getProdutos());
-		obj.setId(id);
-		obj.setProdutos(produtos);
-		obj = servicosService.update(obj);
-		return new ResponseEntity<>("Nome do servico alterado com sucesso", HttpStatus.OK);
-	}
-	@PutMapping("/atualizar-produtos/{id}")
-	public ResponseEntity<?> putServicosProdutos(@PathVariable String id, @RequestBody Servicos obj){
-		List<Produtos> produtos = new ArrayList<>();
-		produtos.addAll(servicosService.findById(id).getProdutos());
-		produtos.addAll(obj.getProdutos());
-		obj.setId(id);
-		obj.setProdutos(produtos);
-		obj = servicosService.updateProdutos(obj);
-		return new ResponseEntity<>("Produtos inserido com sucesso", HttpStatus.OK);
-	}
-	@DeleteMapping("/deletar/{id}")
-	public ResponseEntity<?> deletarTag(@PathVariable String id){
-		servicosService.delete(id);
-		return new ResponseEntity<>("Servico excluida com sucesso", HttpStatus.ACCEPTED);
-	}
-	
 	@GetMapping("/servicos/{id}")
-	public ResponseEntity<?> findService(@PathVariable String id){
+	public ResponseEntity<?> ObterServicoPorId(@PathVariable String id){
 		Servicos find = servicosService.findById(id);
 		return new ResponseEntity<>(find, HttpStatus.OK);
 	}
-	@DeleteMapping("/deletar-produtos/{id}")
-	public ResponseEntity<?> deletarProduto(@PathVariable String id, @RequestBody Servicos obj ){
-		Servicos servicos = servicosService.findById(id);
+	
+
+	@GetMapping("/servicos")
+	
+	public ResponseEntity<?> ObterTodosServicos(){
+		List<Servicos> servicos = servicosService.findAll();
+		return new ResponseEntity<>(servicos, HttpStatus.OK);
+	}
+	
+	@PutMapping("/atualizar/{id}")
+	public ResponseEntity<?> updateServico(@PathVariable String id, @RequestBody Servicos obj){
+		
+		List<Produtos> produtos = new ArrayList<>();
+		
+		produtos.addAll(servicosService.findById(id).getProdutos());
+		
+		obj.setId(id);
+		
+		obj.setProdutos(produtos);
+		
+		obj = servicosService.update(obj);
+		
+		return new ResponseEntity<>("Serviço atualizado com sucesso", HttpStatus.OK);
+	}
+	
+
+
+	
+	@PostMapping("/cadastro")
+	public ResponseEntity<?> insertServico(@RequestBody Servicos obj){
+		
+
+		servicosService.insert(obj);
+		return new ResponseEntity<>("Serviço Cadastrado com sucesso", HttpStatus.OK);
+	
+	}	
+
+	@DeleteMapping("/deletar/{id}")
+	public ResponseEntity<?> deletarServico(@PathVariable String id){
+		servicosService.delete(id);
+		return new ResponseEntity<>("Serviço excluido com sucesso", HttpStatus.ACCEPTED);
+	}
+	
+
+	@PutMapping("/inserir-produto/{id}")
+	public ResponseEntity<?> inserirProdutosNoServico(@PathVariable String id, @RequestBody Servicos obj){
+
+		Servicos servico = servicosService.findById(id);
 		List<String> listaIds = new ArrayList<>();
+		
+		for(Produtos produto : obj.getProdutos()) 
+			listaIds.add(produto.getId());
+		
+		List<Produtos> produtos = servicosProdutos.fromListIds(listaIds);
+
+		TratamentoErro<Produtos> tratamentoErro = new TratamentoErro<Produtos>();
+		
+		tratamentoErro.verificarCopiaEntreListas(produtos, servico.getProdutos());
+		
+		if(tratamentoErro.getHasError()) {
+			return new ResponseEntity<>(tratamentoErro.getErrorLog(), HttpStatus.NOT_ACCEPTABLE);
+		}
+		else {
+			
+			
+			servico.getProdutos().addAll(produtos);
+		
+			servicosService.insert(servico);
+			
+			return new ResponseEntity<>("Produtos inserido com sucesso", HttpStatus.OK);
+		}
+	}
+	
+	
+	@PutMapping("/deletar-produto/{id}")
+	public ResponseEntity<?> removerProdutosDoServico(@PathVariable String id, @RequestBody Servicos obj ){
+		
+		Servicos servico = servicosService.findById(id);
+		
+		List<String> listaIds = new ArrayList<>();
+		
 		for (Produtos produto : obj.getProdutos()) 
 			listaIds.add(produto.getId());
+		
 		List<Produtos> produtos = servicosProdutos.fromListIds(listaIds);
-		servicos.getProdutos().removeAll(produtos);
-		servicosService.insert(servicos);
-		return new ResponseEntity<>("Produtos removidos da categoria com sucesso", HttpStatus.ACCEPTED);
+		
+		servico.getProdutos().removeAll(produtos);
+		
+		servicosService.insert(servico);
+		
+		return new ResponseEntity<>("Produtos removidos do pacote com sucesso", HttpStatus.ACCEPTED);
 	}
 }
