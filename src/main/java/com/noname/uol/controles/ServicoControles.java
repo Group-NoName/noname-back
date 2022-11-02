@@ -59,16 +59,12 @@ public class ServicoControles {
 		
 		obj.setId(id);
 		
-		obj.setProdutos(produtos);
-		
 		obj = servicosService.update(obj);
 		
 		return new ResponseEntity<>("Serviço atualizado com sucesso", HttpStatus.OK);
 	}
 	
 
-
-	
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> insertServico(@RequestBody Servicos obj){
 		
