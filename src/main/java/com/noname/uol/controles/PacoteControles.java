@@ -122,8 +122,6 @@ public class PacoteControles {
 		for (Produtos produto : objDto.getProdutos()) 
 			listaIds.add(produto.getId());
 		
-
-		
 		List<Produtos> produtos = produtoServico.fromListIds(listaIds);
 		
 		pacote.getProdutos().removeAll(produtos);

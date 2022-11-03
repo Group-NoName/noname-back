@@ -26,7 +26,9 @@ import com.noname.uol.entidades.TagProduto;
 import com.noname.uol.entidades.Tags;
 import com.noname.uol.repositorios.produtosRepositorio;
 import com.noname.uol.entidades.Produtos;
+import com.noname.uol.entidades.Servicos;
 import com.noname.uol.servicos.ProdutoServico;
+import com.noname.uol.servicos.ServicosServicos;
 import com.noname.uol.servicos.TagsServico;
 import com.noname.uol.servicos.excecao.TratamentoErro;
 
@@ -47,6 +49,9 @@ public class ProdutoControles {
 	@Autowired
 	private ProdutoServico produtoServico;
 	
+	@Autowired
+	private ServicosServicos servicosService;
+	
 	@Autowired	
 	private TagsServico tagsServico;
 	
@@ -56,27 +61,7 @@ public class ProdutoControles {
 	@Autowired
 	private TratamentoErro tratamentoErro;
 	
-	@GetMapping("/produtosPage")
-	public ResponseEntity<?> obterPageProdutos(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size){
-		
-		List<Produtos> lista = new ArrayList<Produtos>();
-		
-		Pageable paging = PageRequest.of(page, size);
-		
-		Page<Produtos> pageProd = repositorio.findAll(paging);
-		
-		lista = pageProd.getContent();
-		
-		Map<String, Object> response = new HashMap<>();
-		response.put("Produtos", lista);
-		response.put("Pagina atual", pageProd.getNumber());
-		response.put("Total de itens", pageProd.getTotalElements());
-		response.put("Total de paginas", pageProd.getTotalPages());
-		
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
-	
-	
+
 	@GetMapping("/produtos")
 	public ResponseEntity<List<produtoDTO>> obterProdutos() {
 		List<Produtos> produto = produtoServico.findAll();
@@ -93,19 +78,32 @@ public class ProdutoControles {
 		return new ResponseEntity<>(new produtoDTO(produto), HttpStatus.ACCEPTED);
 	}
 	 
-	@PostMapping("/cadastro")
-	public ResponseEntity<?> inserirProduto(@RequestBody produtoDTO objDto){
-		Produtos produto = produtoServico.fromDTO(objDto);
+	// ID do serviço
+	@PostMapping("/cadastro/{id}")
+	public ResponseEntity<?> inserirProduto(@RequestBody List<Produtos> produtos, @PathVariable String id){
 		
-		for (Produtos produtoObj : produtoServico.findAll()) {
-			if(produto.getNome().equals(produtoObj.getNome())) {
-				return new ResponseEntity<>("Produto não pode ter nome repetido", HttpStatus.CONFLICT);
-			}
+		Servicos servico = servicosService.findById(id);
+		
+		TratamentoErro<Produtos> tratamentoErro = new TratamentoErro<Produtos>();
+		
+		tratamentoErro.verificarCopiaEntreListas(servico.getProdutos(), produtos);
+		
+		if(tratamentoErro.getHasError()) {
+			return new ResponseEntity<>(tratamentoErro.getErrorLog(), HttpStatus.NOT_ACCEPTABLE);
 		}
+		else {
+			
+			List<Produtos> produtosAtualizados = new ArrayList<>();
+			
+			for(Produtos obj : produtos)
+				produtosAtualizados.add(produtoServico.insert(obj));
+			
+			servico.getProdutos().addAll(produtosAtualizados);
 		
-		
-		produto = produtoServico.insert(produto);
-		return new ResponseEntity<>("Produto cadastrado com sucesso!", HttpStatus.CREATED);
+			servicosService.update(servico);
+			
+			return new ResponseEntity<>("Produtos inseridos com sucesso", HttpStatus.OK);
+		}
 	}
 	
 	@DeleteMapping("/excluir/{id}")
