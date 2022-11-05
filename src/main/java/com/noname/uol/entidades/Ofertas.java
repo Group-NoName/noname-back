@@ -16,7 +16,7 @@ import lombok.Data;
 
 @Data
 @Document
-public class Ofertas implements Serializable{
+public class Ofertas implements Serializable, InformacaoErro{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -54,6 +54,10 @@ public class Ofertas implements Serializable{
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
+	}
+	@Override
+	public String obterNome() {
+		return getNome();
 	}
 	
 }

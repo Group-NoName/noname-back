@@ -86,7 +86,7 @@ public class ProdutoControles {
 		
 		TratamentoErro<Produtos> tratamentoErro = new TratamentoErro<Produtos>();
 		
-		tratamentoErro.verificarCopiaEntreListas(servico.getProdutos(), produtos);
+		tratamentoErro.verificarCopiaEntreListas(produtos, servico.getProdutos());
 		
 		if(tratamentoErro.getHasError()) {
 			return new ResponseEntity<>(tratamentoErro.getErrorLog(), HttpStatus.NOT_ACCEPTABLE);

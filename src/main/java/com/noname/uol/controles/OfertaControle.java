@@ -69,4 +69,15 @@ public class OfertaControle {
 		return new ResponseEntity<>("Oferta excluída com sucesso", HttpStatus.ACCEPTED);
 	}	
 	
+	@PutMapping("/alterar-preco/{id}/{precoNovo}")
+	public ResponseEntity<?> alterarPrecoOferta(@PathVariable String id, @PathVariable Double precoNovo){
+		Ofertas oferta = ofertaServico.findById(id);
+		
+		oferta.setPreco(precoNovo);
+		
+		ofertaServico.update(oferta);
+		
+		return new ResponseEntity<>("Preço atualizado com sucesso", HttpStatus.ACCEPTED);
+	}
+	
 }
