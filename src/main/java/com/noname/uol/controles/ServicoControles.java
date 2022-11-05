@@ -53,9 +53,7 @@ public class ServicoControles {
 	@PutMapping("/atualizar/{id}")
 	public ResponseEntity<?> updateServico(@PathVariable String id, @RequestBody Servicos obj){
 		
-		List<Produtos> produtos = new ArrayList<>();
-		
-		produtos.addAll(servicosService.findById(id).getProdutos());
+
 		
 		obj.setId(id);
 		
