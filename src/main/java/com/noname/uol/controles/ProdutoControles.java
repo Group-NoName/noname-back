@@ -78,9 +78,18 @@ public class ProdutoControles {
 		return new ResponseEntity<>(new produtoDTO(produto), HttpStatus.ACCEPTED);
 	}
 	 
+	@PostMapping("/cadastro")
+	public ResponseEntity<?> inserirProduto(@RequestBody List<Produtos> produtos){
+		
+		for(Produtos obj : produtos)
+			produtoServico.insert(obj);
+		
+		return new ResponseEntity<>("Produtos cadastrados com sucesso", HttpStatus.ACCEPTED);
+	}
+	
 	// ID do serviço
-	@PostMapping("/cadastro/{id}")
-	public ResponseEntity<?> inserirProduto(@RequestBody List<Produtos> produtos, @PathVariable String id){
+	@PostMapping("/cadastro-servico/{id}")
+	public ResponseEntity<?> inserirProdutoEmServico(@RequestBody List<Produtos> produtos, @PathVariable String id){
 		
 		Servicos servico = servicosService.findById(id);
 		
