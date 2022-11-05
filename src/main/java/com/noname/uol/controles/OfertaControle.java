@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.noname.uol.entidades.Ofertas;
+import com.noname.uol.entidades.Pacotes;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.servicos.OfertasServico;
 import com.noname.uol.servicos.ProdutoServico;
@@ -51,7 +52,11 @@ public class OfertaControle {
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> cadastrarOferta(@RequestBody Ofertas ofertaDto){
 		
-		ofertaServico.insert(ofertaDto);
+		Pacotes pacote = ofertaDto.getPacotes();
+		
+		Ofertas obj = new Ofertas(null, ofertaDto.getNome(), ofertaDto.getPreco(), pacote);
+		
+		ofertaServico.insert(obj);
 		return new ResponseEntity<>("Oferta cadastrada com sucesso", HttpStatus.ACCEPTED);
 		
 	}
