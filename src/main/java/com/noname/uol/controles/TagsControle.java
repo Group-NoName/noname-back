@@ -8,6 +8,7 @@ import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,15 +20,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.noname.uol.entidades.Categorias;
+import com.noname.uol.entidades.Servicos;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.entidades.Tags;
 import com.noname.uol.servicos.ProdutoServico;
 import com.noname.uol.servicos.TagsServico;
+import com.noname.uol.servicos.excecao.TratamentoErro;
+
+import io.swagger.annotations.Api;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/tag")
+@Api(value="tag")
 public class TagsControle {
 
 	@Autowired
@@ -47,24 +52,24 @@ public class TagsControle {
 		Tags tag = tagServico.findById(id);
 		return new ResponseEntity<>(tag, HttpStatus.ACCEPTED);
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirNovaTag(@RequestBody Tags tag){
 		
-		for (Tags tagObj: tagServico.findAll()) {
-			if(tagObj.getNome().equals(tag.getNome()))
-				return new ResponseEntity<>("Nome de tag não pode ser repetido", HttpStatus.CONFLICT);
-		}
-		
-		Tags obj = tagServico.insert(tag);
-		URI uri = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(obj.getId())
-				.toUri();
+//		for (Tags tagObj: tagServico.findAll()) {
+//			if(tagObj.getNome().equals(tag.getNome()))
+//		}
+		List<Tags> targetList = new ArrayList<>();
+		targetList.add(tag);
+		TratamentoErro<Tags> te = new TratamentoErro<Tags>();
+		te.verificarCopiaItemUnico(tagServico.findAll(), tag);
+		if(te.getHasError()) 
+			return new ResponseEntity<>("Nome de tag não pode ser repetido", HttpStatus.CONFLICT);
+		tagServico.insert(tag);
+
 		return new ResponseEntity<>("Tag cadastrada com sucesso", HttpStatus.ACCEPTED);
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping("/atualizar/{id}")
 	public ResponseEntity<?> atualizarTag(@PathVariable String id, @RequestBody Tags tag){
 		
@@ -81,13 +86,14 @@ public class TagsControle {
 		tag = tagServico.update(tag);
 		return new ResponseEntity<>("Tag atualizada com sucesso", HttpStatus.ACCEPTED);
 	}
-	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@DeleteMapping("/excluir/{id}")
 	public ResponseEntity<?> deletarTag(@PathVariable String id){
 		tagServico.delete(id);
 		return new ResponseEntity<>("Tag excluida com sucesso", HttpStatus.ACCEPTED);
 	}
-	
+	/*
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@DeleteMapping("/tag-produtos/{tagId}/{produtoId}")
 	public ResponseEntity<?> deleteRelacao(
 											@PathVariable String tagId,
@@ -100,6 +106,6 @@ public class TagsControle {
 		tag.getProdutos().remove(produto);
 		tagServico.insert(tag);
 		return new ResponseEntity<>("Tag excluida do produto com sucesso", HttpStatus.ACCEPTED);
-	}
+	}*/
 
 }

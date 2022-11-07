@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,14 +17,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.noname.uol.entidades.Categorias;
+import com.noname.uol.entidades.Servicos;
 import com.noname.uol.entidades.Pacotes;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.servicos.PacoteServico;
 import com.noname.uol.servicos.ProdutoServico;
+import com.noname.uol.servicos.excecao.TratamentoErro;
+
+import io.swagger.annotations.Api;
 @CrossOrigin
 @RestController
 @RequestMapping("/pacote")
+@Api(value="pacote")
 public class PacoteControles {
 
 	@Autowired
@@ -46,6 +51,7 @@ public class PacoteControles {
 		return new ResponseEntity<>(pacote, HttpStatus.ACCEPTED);
 	}
 	
+
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirPacote(@RequestBody Pacotes pacote){
 		for (Pacotes pacoteObj : pacoteServico.findAll()) {
@@ -55,13 +61,14 @@ public class PacoteControles {
 		pacoteServico.save(pacote);
 		return new ResponseEntity<>("Pacote criado com sucesso", HttpStatus.CREATED); 
 	}
+
 	
 	@DeleteMapping("/excluir/{id}")
 	public ResponseEntity<?> deletarPacote(@PathVariable String id){
 		pacoteServico.delete(id);
 		return new ResponseEntity<>("Pacote apagado com sucesso", HttpStatus.ACCEPTED);
 	}
-	
+
 	@PutMapping("atualizar/{id}")
 	public ResponseEntity<?> atualizarPacote(
 			@RequestBody Pacotes objDto,
@@ -72,7 +79,7 @@ public class PacoteControles {
 		obj = pacoteServico.update(obj);
 		return new ResponseEntity<>("Pacote atualizado com sucesso", HttpStatus.ACCEPTED);
 	}
-	
+
 	@PutMapping("inserir-produto/{id}")
 	public ResponseEntity<?> inserirProdutosNoPacote(
 			@PathVariable String id,
@@ -82,25 +89,25 @@ public class PacoteControles {
 		
 		List<String> listaIds = new ArrayList<>();
 		
-		boolean hasCopy = false;
-		String errorLog = "";
-		for (Produtos produto : objDto.getProdutos()) {
-			if(pacote.getProdutos().contains(produto)) {
-				hasCopy = true;
-				errorLog += produtoServico.findById(produto.getId()).getNome();
-			}
+		for(Produtos produto : objDto.getProdutos()) 
 			listaIds.add(produto.getId());
 		
-		}
-		if(hasCopy)
-			return new ResponseEntity<>(errorLog, HttpStatus.NOT_ACCEPTABLE);
 		List<Produtos> produtos = produtoServico.fromListIds(listaIds);
+
+		TratamentoErro<Produtos> tratamentoErros = new TratamentoErro<Produtos>();
 		
-		pacote.getProdutos().addAll(produtos);
-	
-		pacoteServico.save(pacote);
+		tratamentoErros.verificarCopiaEntreListas(objDto.getProdutos(), pacote.getProdutos());
+
+		if(tratamentoErros.getHasError()) {
+			return new ResponseEntity<>(tratamentoErros.getErrorLog(), HttpStatus.NOT_ACCEPTABLE);
+		}
+		else {			
+			pacote.getProdutos().addAll(produtos);
 		
-		return new ResponseEntity<>("Produtos inseridos com sucesso no pacote", HttpStatus.ACCEPTED);
+			pacoteServico.save(pacote);
+			
+			return new ResponseEntity<>("Produtos inseridos com sucesso no pacote", HttpStatus.ACCEPTED);
+		}
 	}
 	
 	@PutMapping("remover-produto/{id}")
@@ -114,8 +121,6 @@ public class PacoteControles {
 		
 		for (Produtos produto : objDto.getProdutos()) 
 			listaIds.add(produto.getId());
-		
-
 		
 		List<Produtos> produtos = produtoServico.fromListIds(listaIds);
 		

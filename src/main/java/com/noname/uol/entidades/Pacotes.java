@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.Id;
+import org.springframework.data.annotation.Id;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -24,13 +24,6 @@ public class Pacotes implements Serializable{
 	
 	private String nome;
 	
-	private String descricao;
-	
-	private Double preco;
-	
-	private List<Images> images = new ArrayList<>();
-	
-	@JsonIgnoreProperties(value = {"tags", "descricao", "images"})
 	@DBRef(lazy = true)
 	private List<Produtos> produtos = new ArrayList<>();	
 	
@@ -53,14 +46,10 @@ public class Pacotes implements Serializable{
 
 	public Pacotes() {}
 	
-	public Pacotes(String id, String nome, String descricao, Double preco, List<Images> images,
-			List<Produtos> produtos) {
+	public Pacotes(String id, String nome, List<Produtos> produtos) {
 		super();
 		this.id = id;
 		this.nome = nome;
-		this.descricao = descricao;
-		this.preco = preco;
-		this.images = images;
 		this.produtos = produtos;
 	}
 	

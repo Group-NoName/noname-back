@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.Id;
+import org.springframework.data.annotation.Id;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,24 +16,28 @@ import lombok.Data;
 
 @Data
 @Document
-public class Ofertas implements Serializable{
+public class Ofertas implements Serializable, InformacaoErro{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	private String id;
 	
-	private Double desconto;
+	private String nome;
 	
-	@JsonIgnoreProperties(value = {"tags", "descricao", "images"})
-	@DBRef(lazy = true)
-	private List<Produtos> produtos = new ArrayList<>();
+	private Double preco;
+
+	private Pacotes pacotes;
+	
+
 	
 	public Ofertas() {}
-	public Ofertas(String id, Double desconto, List<Produtos> produtos) {
+	public Ofertas(String id, String nome, Double preco, Pacotes pacotes) {
 		super();
 		this.id = id;
-		this.desconto = desconto;
-		this.produtos = produtos;
+		this.nome = nome;
+		this.preco = preco;
+		this.pacotes = pacotes;
+
 	}
 	
 	@Override
@@ -50,6 +54,10 @@ public class Ofertas implements Serializable{
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
+	}
+	@Override
+	public String obterNome() {
+		return getNome();
 	}
 	
 }

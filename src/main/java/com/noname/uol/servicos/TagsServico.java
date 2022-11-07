@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.noname.uol.entidades.Produtos;
+import com.noname.uol.entidades.TagProduto;
 import com.noname.uol.entidades.Tags;
 import com.noname.uol.repositorios.TagsRepositorio;
 import com.noname.uol.servicos.excecao.ObjectNotFoundException;
@@ -17,6 +18,9 @@ public class TagsServico {
 
 	@Autowired
 	private TagsRepositorio repositorio;
+	
+	@Autowired
+	private ProdutoServico produtoServico;
 	
 	public List<Tags> findAll(){
 		return repositorio.findAll();
@@ -59,5 +63,28 @@ public class TagsServico {
 		
 		return String.join(" ", StringTags);
 	}
+	
+	/*
+	public List<TagProduto> filtrarTagProdutoSemelhante(List<Produtos> todosOsProdutos, String idProdutoAlvo) {
+		
+		List<TagProduto> todasTagProdutos = new ArrayList<>();
+		List<Tags> tagsProdutoAlvo = produtoServico.findById(idProdutoAlvo).getTags();
+
+		for(Produtos produto : todosOsProdutos){
+			if (produto == produtoServico.findById(idProdutoAlvo))
+				continue;
+			TagProduto atualTagProduto = new TagProduto(produto, 0);
+			
+			for (Tags tag : produto.getTags()) {
+				if(tagsProdutoAlvo.contains(tag)) {
+					atualTagProduto.UpScore();
+				}
+			}
+			todasTagProdutos.add(atualTagProduto);
+		}
+		
+		return todasTagProdutos;
+		
+	}*/
 
 }

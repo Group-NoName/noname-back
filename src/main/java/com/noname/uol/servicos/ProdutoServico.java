@@ -3,7 +3,6 @@ package com.noname.uol.servicos;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,13 +46,13 @@ public class ProdutoServico {
 	
 	private void updateData(Produtos newObj, Produtos obj) {
 		newObj.setNome(obj.getNome());
-		newObj.setDescricao(obj.getDescricao());
-		newObj.setImages(obj.getImages());
-		newObj.setPreco(obj.getPreco());
 	}
 	
 	public Produtos fromDTO(produtoDTO objDto) {
-		return new Produtos(objDto.getId(), objDto.getNome(),  objDto.getDescricao(), objDto.getImages(), objDto.getTags(), objDto.getPreco(), objDto.getDesconto());
+		return new Produtos(
+				objDto.getId(),
+				objDto.getNome()
+				);
 	}
 	
 	public List<Produtos> fromTagProduto(List<TagProduto> listTagProduto) {
@@ -72,18 +71,22 @@ public class ProdutoServico {
 
 	}
 	
+	public void save(Produtos produto) {
+		repositorio.save(produto);
+	}
+
+	/*
 	public boolean hasDescount(String productId) {
 		if(findById(productId).getDesconto() != 0) return true;
 		
 		return false;
-	}
+	}*/
 	
 	
-	public void save(Produtos produto) {
-		repositorio.save(produto);
-	}
+
+	/*
 	public void resetar(String id, Double number) {
 		findById(id).setDesconto(number);;	
-	}
+	}*/
 	
 }

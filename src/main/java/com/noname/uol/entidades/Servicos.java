@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.Id;
-
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,7 +14,7 @@ import lombok.Data;
 
 @Data
 @Document
-public class Categorias implements Serializable{
+public class Servicos implements Serializable, InformacaoErro{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -25,9 +24,9 @@ public class Categorias implements Serializable{
 	@DBRef(lazy = true)
 	private List<Produtos> produtos = new ArrayList<>();
 	
-	public Categorias() {}
+	public Servicos() {}
 
-	public Categorias(String id, String nome, List<Produtos> produtos) {
+	public Servicos(String id, String nome, List<Produtos> produtos) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -47,8 +46,13 @@ public class Categorias implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Categorias other = (Categorias) obj;
+		Servicos other = (Servicos) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public String obterNome() {
+		return this.getNome();
 	}
 
 }

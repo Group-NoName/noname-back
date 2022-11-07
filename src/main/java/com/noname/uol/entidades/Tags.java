@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-import javax.persistence.Id;
+import org.springframework.data.annotation.Id;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,7 +18,7 @@ import lombok.Data;
 
 @Data
 @Document
-public class Tags {
+public class Tags implements InformacaoErro {
 	
 	@Id
 	private String id;
@@ -53,6 +53,10 @@ public class Tags {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
+	}
+	@Override
+	public String obterNome() {
+		return this.getNome();
 	}
 	
 }

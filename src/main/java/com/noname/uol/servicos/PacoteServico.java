@@ -39,8 +39,6 @@ public class PacoteServico {
 	}
 	public void updateData(Pacotes newObj, Pacotes obj) {
 		newObj.setNome(obj.getNome());
-		newObj.setDescricao(obj.getDescricao());
-		newObj.setPreco(obj.getPreco());
-		newObj.setImages(obj.getImages());
+		newObj.setProdutos(obj.getProdutos());
 	}
 }

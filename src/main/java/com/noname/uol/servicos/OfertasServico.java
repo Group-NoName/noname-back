@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.noname.uol.entidades.Ofertas;
+import com.noname.uol.entidades.Pacotes;
 import com.noname.uol.entidades.Produtos;
 import com.noname.uol.repositorios.OfertasRepositorio;
-import com.noname.uol.repositorios.produtosRepositorio;
 import com.noname.uol.servicos.excecao.ObjectNotFoundException;
 
 @Service
@@ -40,7 +40,18 @@ public class OfertasServico {
 		repositorio.deleteById(id);
 	}
 	
-	public List<Produtos> atualizarPrecosDescontos(double desconto, List<String> produtosParaAtualizar){
+	public Ofertas update(Ofertas obj) {
+		Ofertas newObj = findById(obj.getId());
+		updateData(newObj, obj);
+		return repositorio.save(newObj);
+	}
+	public void updateData(Ofertas newObj, Ofertas obj) {
+		newObj.setNome(obj.getNome());
+		newObj.setPacotes(obj.getPacotes());
+		newObj.setPreco(obj.getPreco());
+	}
+	
+	/*public List<Produtos> atualizarPrecosDescontos(double desconto, List<String> produtosParaAtualizar){
 		List<Produtos> produtos = new ArrayList<>();
 		for(String idProduto : produtosParaAtualizar) {
 			
@@ -51,9 +62,9 @@ public class OfertasServico {
 			produtoServico.insert(produto);
 		}
 		return produtos;
-	}
+	} */
 	
-	public List<Produtos> atualizarApenasDescontos(double desconto, List<String> produtosParaAtualizar){
+	/* public List<Produtos> atualizarApenasDescontos(double desconto, List<String> produtosParaAtualizar){
 		List<Produtos> produtos = new ArrayList<>();
 		for(String idProduto : produtosParaAtualizar) {
 			
@@ -64,7 +75,7 @@ public class OfertasServico {
 			produtoServico.insert(produto);
 		}
 		return produtos;
-	}
+	} */
 	
 	
 }
