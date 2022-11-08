@@ -26,6 +26,7 @@ public class Ofertas implements Serializable, InformacaoErro{
 	
 	private Double preco;
 
+	@DBRef(lazy = true)
 	private Pacotes pacotes;
 	
 
