@@ -16,7 +16,7 @@ public class produtoDTO implements Serializable{
 
 	private String id;
 	private String nome;
-	//private String descricao;
+	private String descricao;
 	//private Double preco;
 	//private List<Images> images = new ArrayList<>();
 	//private List<Tags> tags = new ArrayList<>();
@@ -30,7 +30,7 @@ public class produtoDTO implements Serializable{
 	public produtoDTO(Produtos obj) {
 		id = obj.getId();
 		nome = obj.getNome();
-		//descricao = obj.getDescricao();
+		descricao = obj.getDescricao();
 		//preco = obj.getPreco();
 		//images = obj.getImages();
 		//tags = obj.getTags();

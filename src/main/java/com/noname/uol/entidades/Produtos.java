@@ -21,13 +21,16 @@ public class Produtos implements Serializable, InformacaoErro {
 	private String id;
 	
 	private String nome;
+	
+	private String descricao;
 		
 	public Produtos() {}
 	
-	public Produtos(String id, String nome) {
+	public Produtos(String id, String nome, String descricao) {
 		super();
 		this.id = id;
 		this.nome = nome;
+		this.descricao = descricao;
 	}
 
 	@Override
