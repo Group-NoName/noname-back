@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
@@ -20,7 +21,11 @@ public class Promocoes implements Serializable, InformacaoErro{
 	
 	private String nome;
 	
-	private List<Ofertas> ofertas = new ArrayList<>();
+	@DBRef(lazy = true)
+	private List<Ofertas> ofertasObrigatorias = new ArrayList<>();
+	
+	@DBRef(lazy = true)
+	private List<Ofertas> ofertasOpcionais = new ArrayList<>();
 	
 
 	@Override

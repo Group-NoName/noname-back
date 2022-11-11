@@ -52,10 +52,9 @@ public class OfertaControle {
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> cadastrarOferta(@RequestBody Ofertas ofertaDto){
 		
-		List<Pacotes> pacotesObrigatorios = ofertaDto.getPacotesObrigatorios();
-		List<Pacotes> pacotesOpcionais = ofertaDto.getPacotesOpcionais();
+		Pacotes pacote = ofertaDto.getPacote();
 		
-		Ofertas obj = new Ofertas(null, ofertaDto.getNome(), ofertaDto.getPreco(), pacotesObrigatorios, pacotesOpcionais);
+		Ofertas obj = new Ofertas(null, ofertaDto.getNome(), ofertaDto.getPreco(), pacote);
 		
 		ofertaServico.insert(obj);
 		return new ResponseEntity<>("Oferta cadastrada com sucesso", HttpStatus.ACCEPTED);
