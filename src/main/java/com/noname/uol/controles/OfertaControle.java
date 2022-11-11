@@ -54,7 +54,7 @@ public class OfertaControle {
 		
 		Pacotes pacote = ofertaDto.getPacotes();
 		
-		Ofertas obj = new Ofertas(null, ofertaDto.getNome(), ofertaDto.getPreco(), pacote);
+		Ofertas obj = new Ofertas(null, ofertaDto.getNome(), ofertaDto.getPreco(), pacote, ofertaDto.getOpcional());
 		
 		ofertaServico.insert(obj);
 		return new ResponseEntity<>("Oferta cadastrada com sucesso", HttpStatus.ACCEPTED);
