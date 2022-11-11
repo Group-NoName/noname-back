@@ -47,7 +47,8 @@ public class OfertasServico {
 	}
 	public void updateData(Ofertas newObj, Ofertas obj) {
 		newObj.setNome(obj.getNome());
-		newObj.setPacotes(obj.getPacotes());
+		newObj.setPacotesOpcionais(obj.getPacotesOpcionais());
+		newObj.setPacotesObrigatorios(obj.getPacotesObrigatorios());
 		newObj.setPreco(obj.getPreco());
 	}
 	

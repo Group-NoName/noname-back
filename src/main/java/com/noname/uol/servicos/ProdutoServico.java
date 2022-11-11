@@ -51,6 +51,7 @@ public class ProdutoServico {
 	public Produtos fromDTO(produtoDTO objDto) {
 		return new Produtos(
 				objDto.getId(),
+				objDto.getDescricao(),
 				objDto.getNome()
 				);
 	}

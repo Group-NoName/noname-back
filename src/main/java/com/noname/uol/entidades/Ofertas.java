@@ -27,19 +27,19 @@ public class Ofertas implements Serializable, InformacaoErro{
 	
 	private Double preco;
 
-	private Pacotes pacotes;
+	private List<Pacotes> pacotesObrigatorios;
 	
-	private Boolean opcional;
+	private List<Pacotes> pacotesOpcionais;
 
 	
 	public Ofertas() {}
-	public Ofertas(String id, String nome, Double preco, Pacotes pacotes, Boolean opcional) {
+	public Ofertas(String id, String nome, Double preco, List<Pacotes> pacotesObrigatorios, List<Pacotes> pacotesOpcionais) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
-		this.pacotes = pacotes;
-		this.opcional = opcional;
+		this.pacotesObrigatorios = pacotesObrigatorios;
+		this.pacotesOpcionais = pacotesOpcionais;
 	}
 	
 	@Override
