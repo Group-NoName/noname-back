@@ -46,12 +46,14 @@ public class ProdutoServico {
 	
 	private void updateData(Produtos newObj, Produtos obj) {
 		newObj.setNome(obj.getNome());
+		newObj.setDescricao(obj.getDescricao());
 	}
 	
 	public Produtos fromDTO(produtoDTO objDto) {
 		return new Produtos(
 				objDto.getId(),
-				objDto.getNome()
+				objDto.getNome(),
+				objDto.getDescricao()
 				);
 	}
 	

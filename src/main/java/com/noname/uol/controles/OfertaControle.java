@@ -52,7 +52,7 @@ public class OfertaControle {
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> cadastrarOferta(@RequestBody Ofertas ofertaDto){
 		
-		Pacotes pacote = ofertaDto.getPacotes();
+		Pacotes pacote = ofertaDto.getPacote();
 		
 		Ofertas obj = new Ofertas(null, ofertaDto.getNome(), ofertaDto.getPreco(), pacote);
 		

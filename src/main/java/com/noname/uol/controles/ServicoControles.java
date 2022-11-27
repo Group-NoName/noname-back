@@ -79,7 +79,7 @@ public class ServicoControles {
 	}
 	
 
-	@PutMapping("/inserir-produto/{id}")
+	@PutMapping("/inserir-produtos/{id}")
 	public ResponseEntity<?> inserirProdutosNoServico(@PathVariable String id, @RequestBody Servicos obj){
 
 		Servicos servico = servicosService.findById(id);
@@ -90,22 +90,13 @@ public class ServicoControles {
 		
 		List<Produtos> produtos = servicosProdutos.fromListIds(listaIds);
 
-		TratamentoErro<Produtos> tratamentoErro = new TratamentoErro<Produtos>();
-		
-		tratamentoErro.verificarCopiaEntreListas(produtos, servico.getProdutos());
-		
-		if(tratamentoErro.getHasError()) {
-			return new ResponseEntity<>(tratamentoErro.getErrorLog(), HttpStatus.NOT_ACCEPTABLE);
-		}
-		else {
+
 			
 			
-			servico.getProdutos().addAll(produtos);
+		servico.getProdutos().addAll(produtos);
 		
-			servicosService.insert(servico);
-			
-			return new ResponseEntity<>("Produtos inserido com sucesso", HttpStatus.OK);
-		}
+		servicosService.insert(servico);			
+		return new ResponseEntity<>("Produtos inserido com sucesso", HttpStatus.OK);
 	}
 	
 	

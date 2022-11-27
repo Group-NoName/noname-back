@@ -55,7 +55,7 @@ public class PacoteControles {
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> inserirPacote(@RequestBody Pacotes pacote){
 		for (Pacotes pacoteObj : pacoteServico.findAll()) {
-			if(pacoteObj.getNome().equals(pacote.getNome()))
+			if(pacoteObj.getNome().equals(pacote.getNome())) 
 				return new ResponseEntity<>("Nome de pacote não pode ser repetido", HttpStatus.CONFLICT);
 		}
 		pacoteServico.save(pacote);

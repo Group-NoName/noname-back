@@ -22,22 +22,21 @@ public class Ofertas implements Serializable, InformacaoErro{
 	@Id
 	private String id;
 	
+	
 	private String nome;
 	
 	private Double preco;
 
-	private Pacotes pacotes;
-	
+	private Pacotes pacote;
 
 	
 	public Ofertas() {}
-	public Ofertas(String id, String nome, Double preco, Pacotes pacotes) {
+	public Ofertas(String id, String nome, Double preco, Pacotes pacote) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
-		this.pacotes = pacotes;
-
+		this.pacote = pacote;
 	}
 	
 	@Override
